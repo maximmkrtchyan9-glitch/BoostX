@@ -4,11 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>BoostX</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
             theme: {
                 extend: {
+                    // 2. Սահմանել ենք Inter-ը որպես հիմնական տառատեսակ
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
                     colors: {
                         'boost-red': '#DC2626',
                         'boost-dark': '#0A0A0A',
@@ -29,6 +38,11 @@
         }
     </script>
     <style>
+        /* 3. Ապահովության համար կիրառում ենք նաև CSS-ով */
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
         * {
             -webkit-tap-highlight-color: transparent;
         }
@@ -76,7 +90,6 @@
 <body class="bg-black">
     <div class="w-full max-w-[375px] mx-auto min-h-screen relative bg-black">
         
-        <!-- Полноэкранный лоадер -->
         <div id="fullScreenLoader" class="fixed inset-0 bg-black/80 z-[100] hidden items-center justify-center">
             <div class="flex gap-1">
                 <div class="w-1.5 h-1.5 bg-white rounded-full dot-wave"></div>
@@ -85,7 +98,6 @@
             </div>
         </div>
 
-        <!-- Главная страница -->
         <main id="mainPage" class="min-h-screen bg-boost-dark pb-20">
             <div class="p-4 pt-8">
                 <h1 class="text-3xl font-bold text-white mb-1">
@@ -93,7 +105,6 @@
                 </h1>
                 <h1 class="text-3xl font-bold text-white mb-8">boosters:</h1>
                 
-                <!-- Standard Booster Card с фоновым изображением -->
                 <div class="relative mb-4 rounded-2xl overflow-hidden bg-boost-card">
                     <img src="images/boosters-bg.png" alt="" class="absolute inset-0 w-full h-full object-cover opacity-70"> <div class="relative p-6 z-10">
                         <h2 class="text-2xl font-bold text-white mb-3">Standard booster</h2>
@@ -122,12 +133,10 @@
             </div>
         </main>
 
-        <!-- Standard: Страница выбора типа буста -->
         <main id="choosePage" class="min-h-screen bg-boost-dark hidden pb-20">
             <div class="p-4 pt-8">
                 <h1 class="text-2xl font-bold text-white mb-6">Choose your boost type</h1>
                 
-                <!-- Прогресс бар -->
                 <div class="flex gap-2 mb-8">
                     <div class="h-1 flex-1 bg-boost-red rounded-full"></div>
                     <div class="h-1 flex-1 bg-gray-700 rounded-full"></div>
@@ -138,11 +147,10 @@
                 </div>
 
                 <div class="space-y-3">
-                    <!-- Holders опция с иконкой -->
                     <button onclick="selectBoostType(this, 'Holders')" 
                         class="w-full bg-boost-card rounded-2xl p-4 flex items-start gap-4 transition-all">
                         <div class="w-12 h-12 bg-boost-red rounded-xl flex items-center justify-center flex-shrink-0">
-                            <img src="images/Holders.png" alt="Holders" class="w-8 h-8">
+                            <img src="images/holders.png" alt="Holders" class="w-8 h-8">
                         </div>
                         <div class="flex-1 text-left">
                             <h3 class="text-white font-semibold text-lg mb-1">Holders</h3>
@@ -152,11 +160,10 @@
                         </div>
                     </button>
 
-                    <!-- Transactions опция с иконкой -->
                     <button onclick="selectBoostType(this, 'Transactions')" 
                         class="w-full bg-boost-card rounded-2xl p-4 flex items-start gap-4 transition-all">
                         <div class="w-12 h-12 bg-boost-red rounded-xl flex items-center justify-center flex-shrink-0">
-                            <img src="images/Transactions.png" alt="Transactions" class="w-8 h-8">
+                            <img src="images/transactions.png" alt="Transactions" class="w-8 h-8">
                         </div>
                         <div class="flex-1 text-left">
                             <h3 class="text-white font-semibold text-lg mb-1">Transactions</h3>
@@ -166,11 +173,10 @@
                         </div>
                     </button>
 
-                    <!-- Volume опция с иконкой -->
                     <button onclick="selectBoostType(this, 'Volume')" 
                         class="w-full bg-boost-card rounded-2xl p-4 flex items-start gap-4 transition-all">
                         <div class="w-12 h-12 bg-boost-red rounded-xl flex items-center justify-center flex-shrink-0">
-                            <img src="images/Volume.png" alt="Volume" class="w-8 h-8">
+                            <img src="images/volume.png" alt="Volume" class="w-8 h-8">
                         </div>
                         <div class="flex-1 text-left">
                             <h3 class="text-white font-semibold text-lg mb-1">Volume</h3>
@@ -180,7 +186,6 @@
                         </div>
                     </button>
 
-                    <!-- Dexscreener reactions опция с иконкой -->
                     <button onclick="selectBoostType(this, 'Dexscreener reactions')" 
                         class="w-full bg-boost-card rounded-2xl p-4 flex items-start gap-4 transition-all">
                         <div class="w-12 h-12 bg-boost-red rounded-xl flex items-center justify-center flex-shrink-0">
@@ -197,12 +202,10 @@
             </div>
         </main>
 
-        <!-- Standard: Страница выбора тарифа -->
         <main id="tariffPage" class="min-h-screen bg-boost-dark hidden pb-20">
             <div class="p-4 pt-8">
                 <h1 class="text-2xl font-bold text-white mb-6">Choose your tariff</h1>
                 
-                <!-- Прогресс бар -->
                 <div class="flex gap-2 mb-8">
                     <div class="h-1 flex-1 bg-boost-red rounded-full"></div>
                     <div class="h-1 flex-1 bg-boost-red rounded-full"></div>
@@ -212,7 +215,6 @@
                     <div class="h-1 flex-1 bg-gray-700 rounded-full"></div>
                 </div>
 
-                <!-- Тарифы -->
                 <div class="space-y-3">
                     <button onclick="selectTariff(this, 'Minimal', '5,000', '60$')" 
                         class="w-full bg-boost-card rounded-2xl p-5 flex justify-between items-center transition-all">
@@ -244,12 +246,10 @@
             </div>
         </main>
 
-        <!-- Standard: Страница контракта -->
         <main id="contractPage" class="min-h-screen bg-boost-dark hidden pb-20">
             <div class="p-4 pt-8">
                 <h1 class="text-2xl font-bold text-white mb-6">Fill in the contract details</h1>
                 
-                <!-- Прогресс бар -->
                 <div class="flex gap-2 mb-8">
                     <div class="h-1 flex-1 bg-boost-red rounded-full"></div>
                     <div class="h-1 flex-1 bg-boost-red rounded-full"></div>
@@ -259,11 +259,9 @@
                     <div class="h-1 flex-1 bg-gray-700 rounded-full"></div>
                 </div>
 
-                <!-- Форма контракта -->
                 <div class="bg-boost-card rounded-2xl p-6">
                     <h2 class="text-white text-xl font-semibold mb-6">Enter your contract address:</h2>
                     
-                    <!-- Выбор сети -->
                     <button onclick="openNetworkModal()" 
                         class="w-full bg-black rounded-xl p-4 flex justify-between items-center mb-4 transition-all active:scale-[0.98]">
                         <span id="selectedNetwork" class="text-gray-400">Choose your network</span>
@@ -272,19 +270,16 @@
                         </svg>
                     </button>
 
-                    <!-- Поле ввода адреса -->
                     <input type="text" 
                         id="contractInput"
                         placeholder="Enter contract address" 
                         class="w-full bg-transparent border-2 border-boost-red rounded-full px-6 py-4 text-white placeholder-gray-500 focus:outline-none mb-4">
                     
-                    <!-- Сообщение об ошибке -->
                     <p id="errorMessage" class="text-boost-red text-sm mb-6 hidden">
                         Please check your CA. Make sure this address belongs to the Ethereum network.
                     </p>
                 </div>
 
-                <!-- Кнопка Next -->
                 <button onclick="handleButtonClick(this, goToCheckOrderPage)" 
                     class="w-full bg-boost-red text-white py-4 rounded-full font-semibold mt-8 transition-transform active:scale-95">
                     Next
@@ -292,12 +287,10 @@
             </div>
         </main>
 
-        <!-- Standard: Страница проверки заказа -->
         <main id="checkOrderPage" class="min-h-screen bg-boost-dark hidden pb-20">
             <div class="p-4 pt-8">
                 <h1 class="text-2xl font-bold text-white mb-6">Check your order</h1>
                 
-                <!-- Прогресс бар -->
                 <div class="flex gap-2 mb-8">
                     <div class="h-1 flex-1 bg-boost-red rounded-full"></div>
                     <div class="h-1 flex-1 bg-boost-red rounded-full"></div>
@@ -307,7 +300,6 @@
                     <div class="h-1 flex-1 bg-gray-700 rounded-full"></div>
                 </div>
 
-                <!-- Детали заказа -->
                 <div class="bg-boost-card rounded-2xl p-6">
                     <h2 class="text-white text-xl font-semibold mb-6">Your order:</h2>
                     
@@ -356,7 +348,6 @@
                     </div>
                 </div>
 
-                <!-- Кнопка подтверждения -->
                 <button onclick="handleButtonClick(this, goToPaymentPage)" 
                     class="w-full bg-boost-red text-white py-4 rounded-full font-semibold mt-8 transition-transform active:scale-95">
                     Confirm payment
@@ -364,12 +355,10 @@
             </div>
         </main>
 
-        <!-- Standard: Страница оплаты -->
         <main id="paymentPage" class="min-h-screen bg-boost-dark hidden pb-20">
             <div class="p-4 pt-8">
                 <h1 class="text-2xl font-bold text-white mb-6">Your payment method</h1>
                 
-                <!-- Прогресс бар -->
                 <div class="flex gap-2 mb-8">
                     <div class="h-1 flex-1 bg-boost-red rounded-full"></div>
                     <div class="h-1 flex-1 bg-boost-red rounded-full"></div>
@@ -379,11 +368,9 @@
                     <div class="h-1 flex-1 bg-gray-700 rounded-full"></div>
                 </div>
 
-                <!-- Форма оплаты -->
                 <div class="bg-boost-card rounded-2xl p-6">
                     <h2 class="text-white text-xl font-semibold mb-6">Choose the payment method:</h2>
                     
-                    <!-- Выбор сети для оплаты -->
                     <button onclick="openPaymentNetworkModal()" 
                         class="w-full bg-black rounded-xl p-4 flex justify-between items-center mb-4 transition-all active:scale-[0.98]">
                         <span id="selectedPaymentNetwork" class="text-gray-400">Choose your network type</span>
@@ -392,7 +379,6 @@
                         </svg>
                     </button>
 
-                    <!-- Выбор криптовалюты -->
                     <button onclick="openCryptoModal()" 
                         class="w-full bg-black rounded-xl p-4 flex justify-between items-center mb-4 transition-all active:scale-[0.98]">
                         <span id="selectedCrypto" class="text-gray-400">Choose your crypto to pay</span>
@@ -401,17 +387,14 @@
                         </svg>
                     </button>
 
-                    <!-- Сумма к оплате -->
                     <div class="bg-black rounded-xl p-4 flex justify-between items-center">
                         <span class="text-gray-500">To payment:</span>
                         <div class="flex items-center gap-2">
-                            <!-- <img src="images/payment-icon.jpg" alt="Payment" class="w-6 h-6"> -->
                             <span id="paymentAmount" class="text-boost-green font-bold">1,124.34 USDT</span>
                         </div>
                     </div>
                 </div>
 
-                <!-- Кнопки действий -->
                 <button onclick="handleButtonClick(this, goToTransferPage)" 
                     class="w-full bg-boost-red text-white py-4 rounded-full font-semibold mt-6 transition-transform active:scale-95">
                     Next
@@ -426,12 +409,10 @@
             </div>
         </main>
 
-        <!-- Standard: Страница перевода криптовалюты -->
         <main id="transferPage" class="min-h-screen bg-boost-dark hidden pb-20">
             <div class="p-4 pt-4">
                 <h1 class="text-xl font-bold text-white mb-4">Transfer your crypto</h1>
                 
-                <!-- Прогресс бар (полный) -->
                 <div class="flex gap-2 mb-4">
                     <div class="h-1 flex-1 bg-boost-red rounded-full"></div>
                     <div class="h-1 flex-1 bg-boost-red rounded-full"></div>
@@ -445,39 +426,32 @@
                     <p class="text-gray-400 text-sm mb-1">You need to pay:</p>
                     <p class="text-xs text-gray-500 mb-3">Send the funds within 30 minutes</p>
                     
-                    <!-- Таймер -->
                     <div class="text-boost-green text-2xl font-bold mb-4" id="timer">29:29:29</div>
                     
-                    <!-- QR код -->
                     <div class="bg-white rounded-2xl p-3 inline-block mb-4">
                         <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQoXgnU7FduTcy0Z7GyoXnMnCqLBwMwAXdiFw&s" alt="QR Code" class="w-40 h-40">
                     </div>
                     
-                    <!-- Адрес кошелька -->
                     <div class="bg-boost-card rounded-xl p-3 mb-3">
                         <p class="text-gray-500 text-xs mb-1">Wallet address</p>
                         <p class="text-white text-xs break-all" id="walletAddress">0xA7b2c9D4e5F8a1B3d6E7f9G2h4J6k8L0m2N4p6</p>
                     </div>
                     
-                    <!-- Сумма -->
                     <div class="flex items-center justify-center gap-2 mb-1">
                         <img src="images/btc.png" alt="Crypto" class="w-4 h-4">
                         <span class="text-boost-green font-bold" id="transferAmount">1,124.34 USDT</span>
                     </div>
                     
-                    <!-- Сеть -->
                     <p class="text-gray-500 text-sm mb-4">
                         <span id="transferNetwork">TRON</span>
                     </p>
                     
-                    <!-- Информация (компактная) -->
                     <div class="text-left space-y-1 text-xs text-gray-500 mb-4">
                         <p>• Only send to the address</p>
                         <p>• Funds lost due to entry to another address cannot be returned</p>
                         <p>• Do not close the tab until payment has been made</p>
                     </div>
                     
-                    <!-- Кнопка ожидания -->
                     <button class="w-full bg-gray-700 text-white py-3 rounded-full font-semibold flex items-center justify-center gap-2">
                         <span>Waiting for a transfer</span>
                         <div class="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
@@ -486,14 +460,10 @@
             </div>
         </main>
 
-        <!-- ADVANCED FLOW НАЧАЛО -->
-
-        <!-- Advanced: Страница настройки буста -->
         <main id="setupPage" class="min-h-screen bg-boost-dark hidden pb-20">
             <div class="p-4 pt-8 overflow-y-auto">
                 <h1 class="text-2xl font-bold text-white mb-6">Set up your boost</h1>
                 
-                <!-- Прогресс бар -->
                 <div class="flex gap-2 mb-8">
                     <div class="h-1 flex-1 bg-boost-red rounded-full"></div>
                     <div class="h-1 flex-1 bg-gray-700 rounded-full"></div>
@@ -503,7 +473,6 @@
                 </div>
 
                 <div class="space-y-4">
-                    <!-- Holders Boost настройка -->
                     <div class="bg-gradient-to-r from-red-900/30 to-red-950/30 rounded-2xl p-4 border border-red-900/50">
                         <div class="flex justify-between items-center mb-2">
                             <div>
@@ -527,7 +496,6 @@
                         </div>
                     </div>
 
-                    <!-- Transactions Boost настройка -->
                     <div class="bg-gradient-to-r from-red-900/30 to-red-950/30 rounded-2xl p-4 border border-red-900/50">
                         <div class="flex justify-between items-center mb-2">
                             <div>
@@ -551,7 +519,6 @@
                         </div>
                     </div>
 
-                    <!-- Volume Boost настройка -->
                     <div class="bg-gradient-to-r from-red-900/30 to-red-950/30 rounded-2xl p-4 border border-red-900/50">
                         <div class="flex justify-between items-center mb-2">
                             <div>
@@ -575,7 +542,6 @@
                         </div>
                     </div>
 
-                    <!-- Dexscreener настройка -->
                     <div class="bg-gradient-to-r from-red-900/30 to-red-950/30 rounded-2xl p-4 border border-red-900/50">
                         <div class="flex justify-between items-center mb-2">
                             <div>
@@ -600,13 +566,11 @@
                     </div>
                 </div>
 
-                <!-- Total cost -->
                 <div class="mt-6 flex justify-between items-center text-white">
                     <span class="text-lg">Total cost:</span>
                     <span class="text-2xl font-bold text-boost-green" id="totalCost">444444$</span>
                 </div>
 
-                <!-- Start boosting button -->
                 <button onclick="handleButtonClick(this, goToAdvancedContract)" 
                     class="w-full bg-boost-red text-white py-4 rounded-full font-semibold mt-6 transition-transform active:scale-95">
                     Start boosting
@@ -614,12 +578,10 @@
             </div>
         </main>
 
-        <!-- Advanced: Страница контракта -->
         <main id="advancedContractPage" class="min-h-screen bg-boost-dark hidden pb-20">
             <div class="p-4 pt-8">
                 <h1 class="text-2xl font-bold text-white mb-6">Fill in the contract details</h1>
                 
-                <!-- Прогресс бар -->
                 <div class="flex gap-2 mb-8">
                     <div class="h-1 flex-1 bg-boost-red rounded-full"></div>
                     <div class="h-1 flex-1 bg-boost-red rounded-full"></div>
@@ -628,11 +590,9 @@
                     <div class="h-1 flex-1 bg-gray-700 rounded-full"></div>
                 </div>
 
-                <!-- Форма -->
                 <div class="bg-boost-card rounded-2xl p-6">
                     <h2 class="text-white text-xl font-semibold mb-6">Enter your contract address:</h2>
                     
-                    <!-- Выбор сети -->
                     <button onclick="openNetworkModal()" 
                         class="w-full bg-black rounded-xl p-4 flex justify-between items-center mb-4 transition-all active:scale-[0.98]">
                         <span id="selectedAdvancedNetwork" class="text-gray-400">Choose your network</span>
@@ -641,19 +601,16 @@
                         </svg>
                     </button>
 
-                    <!-- Поле ввода -->
                     <input type="text" 
                         id="advancedContractInput"
                         placeholder="Enter contract address" 
                         class="w-full bg-transparent border-2 border-boost-red rounded-full px-6 py-4 text-white placeholder-gray-500 focus:outline-none mb-4">
                     
-                    <!-- Сообщение об ошибке -->
                     <p id="advancedErrorMessage" class="text-boost-red text-sm mb-6 hidden">
                         Please check your CA. Make sure this address belongs to the Ethereum network.
                     </p>
                 </div>
 
-                <!-- Кнопка Next -->
                 <button onclick="handleButtonClick(this, goToAdvancedCheckOrder)" 
                     class="w-full bg-boost-red text-white py-4 rounded-full font-semibold mt-8 transition-transform active:scale-95">
                     Next
@@ -661,12 +618,10 @@
             </div>
         </main>
 
-        <!-- Advanced: Страница проверки заказа -->
         <main id="advancedCheckOrderPage" class="min-h-screen bg-boost-dark hidden pb-20">
             <div class="p-4 pt-8">
                 <h1 class="text-2xl font-bold text-white mb-6">Check your order</h1>
                 
-                <!-- Прогресс бар -->
                 <div class="flex gap-2 mb-8">
                     <div class="h-1 flex-1 bg-boost-red rounded-full"></div>
                     <div class="h-1 flex-1 bg-boost-red rounded-full"></div>
@@ -675,7 +630,6 @@
                     <div class="h-1 flex-1 bg-gray-700 rounded-full"></div>
                 </div>
 
-                <!-- Детали заказа -->
                 <div class="bg-boost-card rounded-2xl p-6">
                     <h2 class="text-white text-xl font-semibold mb-6">Your order:</h2>
                     
@@ -693,7 +647,6 @@
                         <div class="flex justify-between items-center">
                             <span class="text-gray-500">Network:</span>
                             <div class="flex items-center gap-2">
-                                <!-- <img src="images/network-icon.jpg" alt="Network" class="w-4 h-4"> -->
                                 <span id="advancedOrderNetwork" class="text-white">Ethereum</span>
                             </div>
                         </div>
@@ -734,7 +687,6 @@
                     </div>
                 </div>
 
-                <!-- Кнопка подтверждения -->
                 <button onclick="handleButtonClick(this, goToAdvancedPayment)" 
                     class="w-full bg-boost-red text-white py-4 rounded-full font-semibold mt-8 transition-transform active:scale-95">
                     Confirm payment
@@ -742,12 +694,10 @@
             </div>
         </main>
 
-        <!-- Advanced: Страница оплаты -->
         <main id="advancedPaymentPage" class="min-h-screen bg-boost-dark hidden pb-20">
             <div class="p-4 pt-8">
                 <h1 class="text-2xl font-bold text-white mb-6">Your payment method</h1>
                 
-                <!-- Прогресс бар -->
                 <div class="flex gap-2 mb-8">
                     <div class="h-1 flex-1 bg-boost-red rounded-full"></div>
                     <div class="h-1 flex-1 bg-boost-red rounded-full"></div>
@@ -756,11 +706,9 @@
                     <div class="h-1 flex-1 bg-gray-700 rounded-full"></div>
                 </div>
 
-                <!-- Форма оплаты -->
                 <div class="bg-boost-card rounded-2xl p-6">
                     <h2 class="text-white text-xl font-semibold mb-6">Choose the payment method:</h2>
                     
-                    <!-- Выбор сети -->
                     <button onclick="openPaymentNetworkModal()" 
                         class="w-full bg-black rounded-xl p-4 flex justify-between items-center mb-4 transition-all active:scale-[0.98]">
                         <span id="selectedAdvancedPaymentNetwork" class="text-gray-400">Choose your network type</span>
@@ -769,7 +717,6 @@
                         </svg>
                     </button>
 
-                    <!-- Выбор криптовалюты -->
                     <button onclick="openCryptoModal()" 
                         class="w-full bg-black rounded-xl p-4 flex justify-between items-center mb-4 transition-all active:scale-[0.98]">
                         <span id="selectedAdvancedCrypto" class="text-gray-400">Choose your crypto to pay</span>
@@ -778,17 +725,14 @@
                         </svg>
                     </button>
 
-                    <!-- Сумма к оплате -->
                     <div class="bg-black rounded-xl p-4 flex justify-between items-center">
                         <span class="text-gray-500">To payment:</span>
                         <div class="flex items-center gap-2">
-                            <!-- <img src="images/payment-icon.jpg" alt="Payment" class="w-6 h-6"> -->
                             <span id="advancedPaymentAmount" class="text-boost-green font-bold">1,124.34 USDT</span>
                         </div>
                     </div>
                 </div>
 
-                <!-- Кнопки действий -->
                 <button onclick="handleButtonClick(this, goToAdvancedTransfer)" 
                     class="w-full bg-boost-red text-white py-4 rounded-full font-semibold mt-6 transition-transform active:scale-95">
                     Next
@@ -803,12 +747,10 @@
             </div>
         </main>
 
-        <!-- Advanced: Страница перевода криптовалюты -->
         <main id="advancedTransferPage" class="min-h-screen bg-boost-dark hidden pb-20">
             <div class="p-4 pt-4">
                 <h1 class="text-xl font-bold text-white mb-4">Transfer your crypto</h1>
                 
-                <!-- Прогресс бар (полный) -->
                 <div class="flex gap-2 mb-4">
                     <div class="h-1 flex-1 bg-boost-red rounded-full"></div>
                     <div class="h-1 flex-1 bg-boost-red rounded-full"></div>
@@ -823,15 +765,12 @@
                         <p class="text-xs text-gray-400 mb-1">Send the funds within 30 minutes</p>
                         <p class="text-xs text-boost-red mb-4">This address is only valid for 30 minutes. After the deadline, DO NOT send the funds, as this will lead to their irretrievable loss.</p>
                         
-                        <!-- Таймер -->
                         <div class="text-boost-green text-3xl font-bold mb-4" id="advancedTimer">29:29:29</div>
                         
-                        <!-- QR код -->
                         <div class="bg-white rounded-xl p-3 inline-block mb-4">
                             <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQoXgnU7FduTcy0Z7GyoXnMnCqLBwMwAXdiFw&s" alt="QR Code" class="w-48 h-48">
                         </div>
                         
-                        <!-- Детали платежа -->
                         <div class="text-left space-y-3">
                             <div>
                                 <p class="text-gray-500 text-xs mb-1">Send it exactly:</p>
@@ -865,7 +804,6 @@
                     </div>
                 </div>
 
-                <!-- Кнопка ожидания -->
                 <button class="w-full bg-gray-700 text-white py-3 rounded-full font-semibold flex items-center justify-center gap-2 mt-4">
                     <span>Waiting for a transfer</span>
                     <div class="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
@@ -873,7 +811,6 @@
             </div>
         </main>
 
-        <!-- Success страница -->
         <main id="successPage" class="min-h-screen bg-boost-dark hidden">
             <div class="h-screen flex flex-col items-center justify-center p-4">
                 <div class="w-32 h-32 mb-6 rounded-full bg-boost-green/20 flex items-center justify-center">
@@ -890,10 +827,8 @@
             </div>
         </main>
 
-        <!-- Error страница -->
         <main id="errorPage" class="min-h-screen bg-boost-dark hidden">
             <div class="h-screen flex flex-col items-center justify-center p-4">
-                <!-- Иконка ошибки с изображением -->
                 <div class="w-32 h-32 mb-6 rounded-full bg-red-900/20 flex items-center justify-center">
                     <img src="images/error-icon.png" alt="Error" class="w-20 h-20">
                 </div>
@@ -908,9 +843,6 @@
             </div>
         </main>
 
-        <!-- МОДАЛЬНЫЕ ОКНА -->
-
-        <!-- Network Modal для выбора сети -->
         <div id="networkModal" class="fixed inset-0 bg-black/95 backdrop-blur-md z-50 hidden flex items-center justify-center">
             <div class="bg-boost-card rounded-2xl p-6 w-full max-w-sm max-h-[80vh] overflow-y-auto relative mx-4">
                 <button onclick="closeNetworkModal()" 
@@ -922,7 +854,6 @@
                 
                 <h3 class="text-white font-semibold text-lg mb-4">Choose your network type:</h3>
                 
-                <!-- EVM Chains -->
                 <div class="mb-4">
                     <button onclick="toggleCollapsible('evmChains')" class="w-full bg-gray-800 text-white rounded-xl p-3 flex justify-between items-center">
                         <span>EVM Chains</span>
@@ -970,7 +901,6 @@
                     </div>
                 </div>
                 
-                <!-- Other chains -->
                 <div>
                     <button onclick="toggleCollapsible('otherChains')" class="w-full bg-gray-800 text-white rounded-xl p-3 flex justify-between items-center">
                         <span>Other chains</span>
@@ -1011,7 +941,6 @@
             </div>
         </div>
 
-        <!-- Payment Network Modal для выбора сети оплаты -->
         <div id="paymentNetworkModal" class="fixed inset-0 bg-black/95 backdrop-blur-md z-50 hidden flex items-center justify-center">
             <div class="bg-boost-card rounded-2xl p-6 w-full max-w-sm max-h-[80vh] overflow-y-auto relative mx-4">
                 <button onclick="closePaymentNetworkModal()" 
@@ -1023,7 +952,6 @@
                 
                 <h3 class="text-white font-semibold text-lg mb-4">Choose your network type:</h3>
                 
-                <!-- EVM Chains -->
                 <div class="mb-4">
                     <button onclick="toggleCollapsible('paymentEvmChains')" class="w-full bg-gray-800 text-white rounded-xl p-3 flex justify-between items-center">
                         <span>EVM Chains</span>
@@ -1089,7 +1017,6 @@
                     </div>
                 </div>
                 
-                <!-- Other chains -->
                 <div>
                     <button onclick="toggleCollapsible('paymentOtherChains')" class="w-full bg-gray-800 text-white rounded-xl p-3 flex justify-between items-center">
                         <span>Other chains</span>
@@ -1175,7 +1102,6 @@
             </div>
         </div>
 
-        <!-- Crypto Modal для выбора криптовалюты -->
         <div id="cryptoModal" class="fixed inset-0 bg-black/95 backdrop-blur-md z-50 hidden flex items-center justify-center">
             <div class="bg-boost-card rounded-2xl p-6 w-full max-w-sm relative mx-4">
                 <button onclick="closeCryptoModal()" 
@@ -1215,7 +1141,6 @@
             </div>
         </div>
 
-        <!-- Wallet Connect Modal -->
         <div id="walletConnectModal" class="fixed inset-0 z-50 hidden">
             <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closeWalletConnect()"></div>
             
@@ -1248,23 +1173,17 @@
                         <img src="images/coinbase.png" alt="Coinbase" class="w-10 h-10">
                     </button>
                     
-                    <!-- <button class="wallet-item opacity-0 bg-gradient-to-br from-gray-900 to-gray-800 rounded-2xl p-4 aspect-square flex items-center justify-center transition-all hover:from-gray-800 hover:to-gray-700 hover:scale-105">
-                        <img src="images/more-wallets.jpg" alt="More" class="w-10 h-10">
-                    </button>
- -->                </div>
+                    </div>
             </div>
         </div>
 
-        <!-- Нижняя навигация -->
         <nav class="fixed bottom-0 left-0 right-0 bg-black border-t border-gray-900 z-40 max-w-[375px] mx-auto">
             <div class="flex justify-around items-center py-3">
-                <!-- Home -->
                 <button class="flex flex-col items-center gap-1 text-gray-500 hover:text-white transition-colors">
                     <img src="images/home.jpg" alt="Home" class="w-6 h-6">
                     <span class="text-xs"><a href="index.html">Home</a></span>
                 </button>
                 
-                <!-- BoosT активная -->
                 <button onclick="returnToHome()" class="flex flex-col items-center gap-1 text-boost-red">
                     <div class="relative">
                         <img src="images/boost.jpg" alt="Boost" class="w-6 h-6">
@@ -1273,13 +1192,11 @@
                     <span class="text-xs font-semibold">BoosT</span>
                 </button>
                 
-                <!-- Colosseum -->
                 <a href="colosseum.html" class="flex flex-col items-center gap-1 text-gray-500 hover:text-white transition-colors">
                     <img src="images/colosseum.jpg" alt="Colosseum" class="w-6 h-6">
                     <span class="text-xs">Colosseum</span>
                 </a>
                 
-                <!-- Profile -->
                 <button class="flex flex-col items-center gap-1 text-gray-500 hover:text-white transition-colors">
                     <img src="images/profile.jpg" alt="Profile" class="w-6 h-6">
                     <span class="text-xs">Profile</span>
@@ -2106,7 +2023,3 @@
     </script>
 </body>
 </html>
-
-
-
-

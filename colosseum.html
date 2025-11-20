@@ -8,25 +8,23 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <style>
         body {
             background-color: #000;
             color: white;
             -webkit-user-select: none;
             user-select: none;
-            font-family: 'Inter', sans-serif; /* 1. Inter font applied globally */
+            font-family: 'Inter', sans-serif;
         }
-        /* Hide scrollbars */
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         
-        /* Chart Candles */
         .chart-candle-green { background-color: #22c55e; width: 6px; position: relative; }
         .chart-candle-green::after { content: ''; position: absolute; left: 2px; top: -4px; bottom: -4px; width: 2px; background-color: #22c55e; }
         .chart-candle-red { background-color: #ef4444; width: 6px; position: relative; }
         .chart-candle-red::after { content: ''; position: absolute; left: 2px; top: -4px; bottom: -4px; width: 2px; background-color: #ef4444; }
         
-        /* Inputs */
         .custom-input {
             background-color: transparent;
             border: none;
@@ -47,17 +45,14 @@
             margin-bottom: 12px;
         }
         
-        /* Checkbox */
         .custom-checkbox input:checked + div { background-color: #e61b28; border-color: #e61b28; }
         .custom-checkbox input:checked + div svg { display: block; }
 
-        /* Delete Modal Blur Background */
         .blur-backdrop {
             backdrop-filter: blur(8px);
             background-color: rgba(0, 0, 0, 0.7);
         }
 
-        /* Table Styles for Results Page */
         .results-table th {
             color: #9ca3af;
             font-weight: 500;
@@ -74,544 +69,696 @@
         .results-row:hover {
             background-color: #0a0a0a;
         }
+
+        .chart-container {
+            height: 350px;
+        }
+
+        @keyframes flash-price {
+            0%, 100% { background-color: #ef4444; }
+            50% { background-color: #b91c1c; }
+        }
+
+        .flashing-price {
+            animation: flash-price 1.5s infinite alternate;
+        }
+
+        @keyframes moving-line {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-3px); }
+            100% { transform: translateY(0); }
+        }
+
+        .animated-price-line {
+            animation: moving-line 3s infinite ease-in-out;
+        }
+
+        .apexcharts-canvas {
+            font-family: inherit;
+        }
+
+        .apexcharts-xaxis-label, .apexcharts-yaxis-label {
+            fill: #9CA3AF !important;
+            font-size: 10px !important;
+        }
+
+        .apexcharts-gridline {
+            stroke: #222 !important;
+        }
+
+        .apexcharts-tooltip, .apexcharts-legend {
+            background: #111827 !important;
+            color: #fff !important;
+            border: 1px solid #374151 !important;
+        }
+
+        .apexcharts-tooltip-title {
+            background: #1F2937 !important;
+            border-bottom: 1px solid #374151 !important;
+            color: #fff !important;
+        }
+
+        .apexcharts-xaxistooltip, .apexcharts-yaxistooltip {
+            background: #1F2937 !important;
+            color: #fff !important;
+            border: 1px solid #374151 !important;
+        }
+
+        .apexcharts-yaxistooltip-text {
+            color: #fff !important;
+        }
     </style>
 </head>
 <body class="font-sans antialiased overflow-hidden bg-black text-white">
 
-    <div id="page-colosseum" class="max-w-md mx-auto bg-black min-h-screen relative border-x border-gray-900 pb-48 overflow-y-auto h-screen no-scrollbar">
-        
-        <div class="flex items-center justify-between px-4 py-2 text-xs font-bold bg-black border-b border-gray-800 sticky top-0 z-40">
-            <div class="flex items-center gap-2">
-                <span>#1</span>
-                <div class="w-5 h-5 bg-orange-500 rounded-full overflow-hidden"><img src="https://api.dicebear.com/9.x/avataaars/svg?seed=Felix" alt="avatar"></div>
-                <span>BoostTX • <span class="text-red-500">2,432 🔥</span></span>
+  <div id="page-colosseum" class="max-w-md mx-auto bg-black min-h-screen relative border-x border-gray-900 pb-56 overflow-y-auto h-screen no-scrollbar">
+    
+    <div class="flex items-center justify-between px-4 py-2 text-xs font-bold bg-black border-b border-gray-800 sticky top-0 z-40">
+        <div class="flex items-center gap-2">
+            <span>#1</span>
+            <div class="w-5 h-5 bg-orange-500 rounded-full overflow-hidden"><img src="https://api.dicebear.com/9.x/avataaars/svg?seed=Felix" alt="avatar"></div>
+            <span>BoostTX • <span class="text-red-500">2,432 🔥</span></span>
+        </div>
+        <div class="flex items-center gap-2 opacity-50">
+            <span>#1</span>
+            <div class="w-5 h-5 bg-orange-500 rounded-full overflow-hidden"><img src="https://api.dicebear.com/9.x/avataaars/svg?seed=Felix" alt="avatar"></div>
+            <span>BoosT</span>
+        </div>
+    </div>
+
+    <div class="pt-6 pb-2 text-center bg-black z-30 relative">
+        <h1 class="text-2xl font-bold flex items-center justify-center gap-2">The Colosseum <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z" /></svg></h1>
+        <p class="text-gray-400 text-sm">Top projects</p>
+    </div>
+
+    <div class="flex mt-4 border-b border-gray-800 sticky top-8 bg-black z-30">
+        <div class="flex-1 flex justify-center pb-3 border-b-2 border-red-600 cursor-pointer">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
+        </div>
+        <div onclick="openResults()" class="flex-1 flex justify-center pb-3 border-b-2 border-transparent text-gray-500 cursor-pointer hover:text-gray-300 transition">
+             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" /></svg>
+        </div>
+    </div>
+
+    <div class="p-4 space-y-4">
+        <div class="bg-[#151515] rounded-3xl p-4 border border-gray-800 relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-48 h-48 bg-orange-600 rounded-full blur-3xl opacity-20 -mr-10 -mt-10 pointer-events-none"></div>
+            <div class="flex justify-between items-start mb-3 relative z-10"><span class="bg-yellow-500 text-black text-xs font-bold px-3 py-1 rounded-full">TOP #1</span><button class="flex items-center gap-1 text-xs text-gray-400 bg-gray-800/50 px-2 py-1 rounded-lg border border-gray-700">Share <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/></svg></button></div>
+            <div class="flex gap-3 items-center mb-4 relative z-10">
+                <div class="w-16 h-16 bg-orange-500 rounded-full overflow-hidden border-2 border-orange-400 flex-shrink-0"><img src="https://api.dicebear.com/9.x/bottts-neutral/svg?seed=fire" class="w-full h-full object-cover"></div>
+                <div><div class="bg-white text-black text-[10px] font-bold px-2 py-0.5 rounded inline-flex items-center gap-1 mb-1">Solana <svg class="w-2 h-2" fill="currentColor" viewBox="0 0 20 20"><path d="M3 5h14v2H3V5zm0 8h14v2H3v-2z"/></svg></div><h3 class="text-lg font-bold">SoulVerse RPG</h3><div class="text-gray-500 text-xs flex items-center gap-1">CA: 0x34a9...4a86 <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg></div></div>
             </div>
-            <div class="flex items-center gap-2 opacity-50">
-                <span>#1</span>
-                <div class="w-5 h-5 bg-orange-500 rounded-full overflow-hidden"><img src="https://api.dicebear.com/9.x/avataaars/svg?seed=Felix" alt="avatar"></div>
-                <span>BoosT</span>
+            <div class="flex items-center gap-2 mb-4 relative z-10">
+                <button class="bg-red-900/40 border border-red-900 text-red-200 px-4 py-1.5 rounded-full text-sm font-medium flex items-center gap-2 flex-1 justify-center">Vote <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"></path></svg></button>
+                <button onclick="openBoost()" class="bg-[#1f1f1f] text-gray-300 px-4 py-1.5 rounded-full text-sm font-medium border border-gray-700 flex-1 text-center">More info</button>
+            </div>
+            <div class="grid grid-cols-3 gap-2 relative z-10">
+                <div class="bg-black/40 p-2 rounded-xl text-center border border-gray-800"><div class="text-[10px] text-gray-400">Transactions</div><div class="text-green-500 font-bold text-sm">+1,6M</div></div>
+                <div class="bg-black/40 p-2 rounded-xl text-center border border-gray-800"><div class="text-[10px] text-gray-400">Transactions</div><div class="text-green-500 font-bold text-sm">+1,6M</div></div>
+                <div class="bg-black/40 p-2 rounded-xl text-center border border-gray-800"><div class="text-[10px] text-gray-400">Transactions</div><div class="text-green-500 font-bold text-sm">+1,6M</div></div>
             </div>
         </div>
 
-        <div class="pt-6 pb-2 text-center bg-black z-30 relative">
-            <h1 class="text-2xl font-bold flex items-center justify-center gap-2">The Colosseum <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z" /></svg></h1>
-            <p class="text-gray-400 text-sm">Top projects</p>
-        </div>
-
-        <div class="flex mt-4 border-b border-gray-800 sticky top-8 bg-black z-30">
-            <div class="flex-1 flex justify-center pb-3 border-b-2 border-red-600 cursor-pointer">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
-            </div>
-            <div onclick="openResults()" class="flex-1 flex justify-center pb-3 border-b-2 border-transparent text-gray-500 cursor-pointer hover:text-gray-300 transition">
-                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" /></svg>
-            </div>
-        </div>
-
-        <div class="p-4 space-y-4">
-            <div class="bg-[#151515] rounded-3xl p-4 border border-gray-800 relative overflow-hidden">
-                <div class="absolute top-0 right-0 w-48 h-48 bg-orange-600 rounded-full blur-3xl opacity-20 -mr-10 -mt-10 pointer-events-none"></div>
-                <div class="flex justify-between items-start mb-3 relative z-10"><span class="bg-yellow-500 text-black text-xs font-bold px-3 py-1 rounded-full">TOP #1</span><button class="flex items-center gap-1 text-xs text-gray-400 bg-gray-800/50 px-2 py-1 rounded-lg border border-gray-700">Share <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/></svg></button></div>
-                <div class="flex gap-3 items-center mb-4 relative z-10">
-                    <div class="w-16 h-16 bg-orange-500 rounded-full overflow-hidden border-2 border-orange-400 flex-shrink-0"><img src="https://api.dicebear.com/9.x/bottts-neutral/svg?seed=fire" class="w-full h-full object-cover"></div>
-                    <div><div class="bg-white text-black text-[10px] font-bold px-2 py-0.5 rounded inline-flex items-center gap-1 mb-1">Solana <svg class="w-2 h-2" fill="currentColor" viewBox="0 0 20 20"><path d="M3 5h14v2H3V5zm0 8h14v2H3v-2z"/></svg></div><h3 class="text-lg font-bold">SoulVerse RPG</h3><div class="text-gray-500 text-xs flex items-center gap-1">CA: 0x34a9...4a86 <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg></div></div>
-                </div>
-                <div class="flex items-center gap-2 mb-4 relative z-10">
-                    <button class="bg-red-900/40 border border-red-900 text-red-200 px-4 py-1.5 rounded-full text-sm font-medium flex items-center gap-2 flex-1 justify-center">Vote <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"></path></svg></button>
-                    <button onclick="openProject()" class="bg-[#1f1f1f] text-gray-300 px-4 py-1.5 rounded-full text-sm font-medium border border-gray-700 flex-1 text-center">More info</button>
-                </div>
-                <div class="grid grid-cols-3 gap-2 relative z-10">
-                    <div class="bg-black/40 p-2 rounded-xl text-center border border-gray-800"><div class="text-[10px] text-gray-400">Transactions</div><div class="text-green-500 font-bold text-sm">+1,6M</div></div>
-                    <div class="bg-black/40 p-2 rounded-xl text-center border border-gray-800"><div class="text-[10px] text-gray-400">Transactions</div><div class="text-green-500 font-bold text-sm">+1,6M</div></div>
-                    <div class="bg-black/40 p-2 rounded-xl text-center border border-gray-800"><div class="text-[10px] text-gray-400">Transactions</div><div class="text-green-500 font-bold text-sm">+1,6M</div></div>
-                </div>
-            </div>
-            
+        <div class="mb-6">
             <button onclick="openPastBest()" class="w-full bg-[#111] text-white py-4 rounded-3xl font-medium border border-gray-800 text-lg hover:bg-[#1a1a1a] transition">Past best projects</button>
         </div>
+    </div>
 
-        <div class="fixed bottom-0 left-0 right-0 mx-auto max-w-md z-50 pointer-events-none">
-            <div class="px-4 mb-20 relative"> 
-                 <button onclick="openRules()" class="w-full bg-[#e61b28] text-white py-4 rounded-full font-bold text-xl shadow-lg flex items-center justify-center gap-2 pointer-events-auto hover:bg-red-700 transition shadow-red-900/50">Publish project <span class="text-2xl font-thin">+</span></button>
-            </div>
-            <div class="bg-black border-t border-gray-800 pb-6 pt-3 px-6 flex justify-between items-center absolute bottom-0 w-full pointer-events-auto">
-                <div class="flex flex-col items-center text-gray-500"><svg class="h-6 w-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg><span class="text-[10px]"><a href="index.html">Home</a></span></div>
-                <div class="flex flex-col items-center text-gray-500"><svg class="h-6 w-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z" /></svg><span class="text-[10px]">BoosT</span></div>
-                <div class="flex flex-col items-center text-red-600"><svg class="h-6 w-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg><span class="text-[10px]">Colosseum</span></div>
-                <div class="flex flex-col items-center text-gray-500"><svg class="h-6 w-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg><span class="text-[10px]">Profile</span></div>
-            </div>
+    <div class="fixed bottom-0 left-0 right-0 mx-auto max-w-md z-50">
+        <div class="px-4 mb-4">
+            <button onclick="openPublish()" class="w-full bg-[#e61b28] text-white py-4 rounded-full font-bold text-xl shadow-lg flex items-center justify-center gap-2 hover:bg-red-700 transition shadow-red-900/50">Publish project <span class="text-2xl font-thin">+</span></button>
+        </div>
+
+        <div class="flex justify-around items-center py-4 bg-black border-t border-gray-800 pointer-events-auto">
+            <a href="index.html" class="flex flex-col items-center gap-1 text-gray-500 hover:text-white transition-colors">
+                <img src="images/home.jpg" alt="Home" class="w-7 h-7">
+                <span class="text-xs">Home</span>
+            </a>
+            
+            <button class="flex flex-col items-center gap-1 text-boost-red">
+                <div class="relative">
+                    <img src="images/boost.jpg" alt="Boost" class="w-7 h-7">
+                    <div class="absolute -top-1 -right-1 w-2 h-2 bg-boost-red rounded-full"></div>
+                </div>
+                <span class="text-xs font-semibold">BoosT</span>
+            </button>
+            
+            <a href="colosseum.html" class="flex flex-col items-center gap-1 text-white transition-colors">
+                <img src="images/colosseum.jpg" alt="Colosseum" class="w-7 h-7">
+                <span class="text-xs">Colosseum</span>
+            </a>
+            
+            <button class="flex flex-col items-center gap-1 text-gray-500 hover:text-white transition-colors">
+                <img src="images/profile.jpg" alt="Profile" class="w-7 h-7">
+                <span class="text-xs">Profile</span>
+            </button>
+        </div>
+    </div>
+</div>
+
+<div id="page-past-best" class="hidden fixed inset-0 z-[60] bg-black max-w-md mx-auto flex flex-col">
+     <div class="flex items-center justify-between px-4 py-2 text-xs font-bold bg-black border-b border-gray-800 sticky top-0 z-50">
+        <div class="flex items-center gap-2">
+            <span>#1</span>
+            <div class="w-5 h-5 bg-orange-500 rounded-full overflow-hidden"><img src="https://api.dicebear.com/9.x/avataaars/svg?seed=Felix" alt="avatar"></div>
+            <span>BoostTX • <span class="text-red-500">2,432 🔥</span></span>
+        </div>
+         <div class="flex items-center gap-2 opacity-50">
+            <span>#1</span>
+            <div class="w-5 h-5 bg-orange-500 rounded-full overflow-hidden"><img src="https://api.dicebear.com/9.x/avataaars/svg?seed=Felix" alt="avatar"></div>
+            <span>BoosT</span>
         </div>
     </div>
 
-    <div id="page-past-best" class="hidden fixed inset-0 z-[60] bg-black max-w-md mx-auto flex flex-col">
-         <div class="flex items-center justify-between px-4 py-2 text-xs font-bold bg-black border-b border-gray-800 sticky top-0 z-40">
-            <div class="flex items-center gap-2">
-                <span>#1</span>
-                <div class="w-5 h-5 bg-orange-500 rounded-full overflow-hidden"><img src="https://api.dicebear.com/9.x/avataaars/svg?seed=Felix" alt="avatar"></div>
-                <span>BoostTX • <span class="text-red-500">2,432 🔥</span></span>
-            </div>
-             <div class="flex items-center gap-2 opacity-50">
-                <span>#1</span>
-                <div class="w-5 h-5 bg-orange-500 rounded-full overflow-hidden"><img src="https://api.dicebear.com/9.x/avataaars/svg?seed=Felix" alt="avatar"></div>
-                <span>BoosT</span>
-            </div>
-        </div>
-
-        <div class="pt-6 pb-2 text-center bg-black z-30 relative">
-            <div class="relative">
-                 <button onclick="closePastBest()" class="absolute left-4 top-1 p-1 text-gray-400 hover:text-white"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg></button>
-                <h1 class="text-2xl font-bold flex items-center justify-center gap-2">The Colosseum <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z" /></svg></h1>
-            </div>
-            <p class="text-gray-400 text-sm">Past best projects</p>
-        </div>
-
-        <div class="flex-1 overflow-y-auto pb-32 no-scrollbar">
-             <div class="px-4 mt-4">
-                <div class="bg-[#111] border border-[#333] rounded-full px-4 py-3 flex items-center gap-2">
-                    <input type="text" placeholder="Find your project" class="bg-transparent w-full outline-none text-sm text-white placeholder-gray-500">
-                    <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-                </div>
-            </div>
-
-             <div class="px-4 mt-6">
-                <div class="bg-[#0a0a0a] border border-[#222] rounded-3xl p-4">
-                    <div class="grid grid-cols-3 divide-x divide-[#222] mb-4">
-                        <div class="text-center">
-                            <div class="text-[10px] text-gray-500 uppercase tracking-wider mb-1">Date</div>
-                            <div class="text-xl font-bold">14</div>
-                        </div>
-                         <div class="text-center">
-                            <div class="text-[10px] text-gray-500 uppercase tracking-wider mb-1">Month</div>
-                            <div class="text-xl font-bold">11</div>
-                        </div>
-                         <div class="text-center">
-                            <div class="text-[10px] text-gray-500 uppercase tracking-wider mb-1">Year</div>
-                            <div class="text-xl font-bold">2025</div>
-                        </div>
-                    </div>
-                    <div class="flex justify-between items-center text-gray-500 text-xs font-medium">
-                        <div class="flex flex-col items-center gap-2 opacity-30"><span>Tue</span><span>11</span><span>Nov</span></div>
-                        <div class="flex flex-col items-center gap-2 opacity-50"><span>Wed</span><span>12</span><span>Nov</span></div>
-                        <div class="flex flex-col items-center gap-2 opacity-70"><span>Thu</span><span>13</span><span>Nov</span></div>
-                        <div class="bg-[#e61b28] text-white rounded-xl px-3 py-2 flex flex-col items-center gap-1 shadow-[0_0_15px_rgba(230,27,40,0.4)]">
-                            <span class="text-[10px]">Fri</span>
-                            <span class="text-lg font-bold">14</span>
-                            <span class="text-[10px]">Nov</span>
-                        </div>
-                         <div class="flex flex-col items-center gap-2 opacity-30"><span>Sat</span><span>15</span><span>Nov</span></div>
-                         <div class="flex flex-col items-center gap-2 opacity-20"><span>Sun</span><span>16</span><span>Nov</span></div>
-                         <div class="flex flex-col items-center gap-2 opacity-10"><span>Mon</span><span>17</span><span>Nov</span></div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="px-4 mt-6 text-gray-300 text-sm">Best projects for 14 November 2025, Friday:</div>
-
-            <div class="p-4 space-y-4">
-                 <div class="bg-[#151515] rounded-3xl p-4 border border-gray-800 relative overflow-hidden">
-                    <div class="absolute top-0 right-0 w-48 h-48 bg-orange-600 rounded-full blur-3xl opacity-10 pointer-events-none"></div>
-                    <div class="flex justify-between items-start mb-3 relative z-10"><span class="bg-yellow-500 text-black text-xs font-bold px-3 py-1 rounded-full">TOP #1</span><button class="flex items-center gap-1 text-xs text-gray-400 bg-gray-800/50 px-2 py-1 rounded-lg border border-gray-700">Share <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/></svg></button></div>
-                    <div class="flex gap-3 items-center mb-4 relative z-10">
-                        <div class="w-16 h-16 bg-orange-500 rounded-full overflow-hidden border-2 border-orange-400 flex-shrink-0"><img src="https://api.dicebear.com/9.x/bottts-neutral/svg?seed=fire" class="w-full h-full object-cover"></div>
-                        <div><div class="bg-white text-black text-[10px] font-bold px-2 py-0.5 rounded inline-flex items-center gap-1 mb-1">Solana <svg class="w-2 h-2" fill="currentColor" viewBox="0 0 20 20"><path d="M3 5h14v2H3V5zm0 8h14v2H3v-2z"/></svg></div><h3 class="text-lg font-bold">SoulVerse RPG</h3><div class="text-gray-500 text-xs flex items-center gap-1">CA: 0x34a9...4a86 <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg></div></div>
-                    </div>
-                    <div class="flex items-center gap-2 mb-4 relative z-10">
-                        <button class="bg-[#e61b28] text-white px-4 py-1.5 rounded-full text-sm font-bold flex items-center gap-2 flex-1 justify-center hover:bg-red-700">Vote <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"></path></svg></button>
-                        <button onclick="openProject()" class="bg-[#1f1f1f] text-gray-300 px-4 py-1.5 rounded-full text-sm font-medium border border-gray-700 flex-1 text-center">More info</button>
-                    </div>
-                     <div class="grid grid-cols-3 gap-2 relative z-10">
-                        <div class="bg-black/40 p-2 rounded-xl text-center border border-gray-800"><div class="text-[10px] text-gray-400">Transactions</div><div class="text-green-500 font-bold text-sm">+1,6M</div></div>
-                        <div class="bg-black/40 p-2 rounded-xl text-center border border-gray-800"><div class="text-[10px] text-gray-400">Transactions</div><div class="text-green-500 font-bold text-sm">+1,6M</div></div>
-                        <div class="bg-black/40 p-2 rounded-xl text-center border border-gray-800"><div class="text-[10px] text-gray-400">Transactions</div><div class="text-green-500 font-bold text-sm">+1,6M</div></div>
-                    </div>
-                </div>
-                 <div class="bg-[#151515] rounded-3xl p-4 border border-gray-800 relative overflow-hidden">
-                    <div class="absolute top-0 right-0 w-48 h-48 bg-orange-600 rounded-full blur-3xl opacity-10 pointer-events-none"></div>
-                    <div class="flex justify-between items-start mb-3 relative z-10"><span class="bg-yellow-500 text-black text-xs font-bold px-3 py-1 rounded-full">TOP #1</span><button class="flex items-center gap-1 text-xs text-gray-400 bg-gray-800/50 px-2 py-1 rounded-lg border border-gray-700">Share <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/></svg></button></div>
-                    <div class="flex gap-3 items-center mb-4 relative z-10">
-                        <div class="w-16 h-16 bg-orange-500 rounded-full overflow-hidden border-2 border-orange-400 flex-shrink-0"><img src="https://api.dicebear.com/9.x/bottts-neutral/svg?seed=Felix" class="w-full h-full object-cover"></div>
-                        <div><div class="bg-white text-black text-[10px] font-bold px-2 py-0.5 rounded inline-flex items-center gap-1 mb-1">Solana <svg class="w-2 h-2" fill="currentColor" viewBox="0 0 20 20"><path d="M3 5h14v2H3V5zm0 8h14v2H3v-2z"/></svg></div><h3 class="text-lg font-bold">SoulVerse RPG</h3><div class="text-gray-500 text-xs flex items-center gap-1">CA: 0x34a9...4a86 <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg></div></div>
-                    </div>
-                    <div class="flex items-center gap-2 mb-4 relative z-10">
-                        <button class="bg-[#e61b28] text-white px-4 py-1.5 rounded-full text-sm font-bold flex items-center gap-2 flex-1 justify-center hover:bg-red-700">Vote <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"></path></svg></button>
-                         <button onclick="openProject()" class="bg-[#1f1f1f] text-gray-300 px-4 py-1.5 rounded-full text-sm font-medium border border-gray-700 flex-1 text-center">More info</button>
-                    </div>
-                     <div class="grid grid-cols-3 gap-2 relative z-10">
-                        <div class="bg-black/40 p-2 rounded-xl text-center border border-gray-800"><div class="text-[10px] text-gray-400">Transactions</div><div class="text-green-500 font-bold text-sm">+1,6M</div></div>
-                        <div class="bg-black/40 p-2 rounded-xl text-center border border-gray-800"><div class="text-[10px] text-gray-400">Transactions</div><div class="text-green-500 font-bold text-sm">+1,6M</div></div>
-                        <div class="bg-black/40 p-2 rounded-xl text-center border border-gray-800"><div class="text-[10px] text-gray-400">Transactions</div><div class="text-green-500 font-bold text-sm">+1,6M</div></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <div class="bg-black border-t border-gray-800 pb-6 pt-3 px-6 flex justify-between items-center absolute bottom-0 w-full z-50">
-            <div onclick="closePastBest()" class="flex flex-col items-center text-gray-500 cursor-pointer"><svg class="h-6 w-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg><span class="text-[10px]">Home</span></div>
-            <div class="flex flex-col items-center text-gray-500"><svg class="h-6 w-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z" /></svg><span class="text-[10px]">BoosT</span></div>
-            <div class="flex flex-col items-center text-red-600"><svg class="h-6 w-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg><span class="text-[10px]">Colosseum</span></div>
-            <div class="flex flex-col items-center text-gray-500"><svg class="h-6 w-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg><span class="text-[10px]">Profile</span></div>
-        </div>
-    </div>
-
-    <div id="page-results" class="hidden fixed inset-0 z-[70] bg-black max-w-md md:max-w-7xl mx-auto flex flex-col transition-all duration-300">
-         <div class="flex items-center justify-between px-4 py-2 text-xs font-bold bg-black border-b border-gray-800 sticky top-0 z-40">
-            <div class="flex items-center gap-2">
-                <span>#1</span>
-                <div class="w-5 h-5 bg-orange-500 rounded-full overflow-hidden"><img src="https://api.dicebear.com/9.x/avataaars/svg?seed=Felix" alt="avatar"></div>
-                <span>BoostTX • <span class="text-red-500">2,432 🔥</span></span>
-            </div>
-             <div class="flex items-center gap-2 opacity-50">
-                <span>#1</span>
-                <div class="w-5 h-5 bg-orange-500 rounded-full overflow-hidden"><img src="https://api.dicebear.com/9.x/avataaars/svg?seed=Felix" alt="avatar"></div>
-                <span>BoosT</span>
-            </div>
-        </div>
-
-        <div class="pt-6 pb-2 text-center bg-black z-30 relative">
+    <div class="pt-6 pb-2 text-center bg-black z-30 relative">
+        <div class="relative">
+             <button onclick="closePastBest()" class="absolute left-4 top-1 p-1 text-gray-400 hover:text-white"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg></button>
             <h1 class="text-2xl font-bold flex items-center justify-center gap-2">The Colosseum <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z" /></svg></h1>
-            <p class="text-gray-400 text-sm">Results sheet</p>
         </div>
+        <p class="text-gray-400 text-sm">Past best projects</p>
+    </div>
 
-        <div class="flex mt-4 border-b border-gray-800 sticky top-8 bg-black z-30">
-             <div onclick="closeResults()" class="flex-1 flex justify-center pb-3 border-b-2 border-transparent text-gray-500 cursor-pointer hover:text-white transition">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
-            </div>
-            <div class="flex-1 flex justify-center pb-3 border-b-2 border-red-600 cursor-pointer">
-                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" /></svg>
-            </div>
-        </div>
-
-         <div class="px-4 mt-4 mb-4">
+    <div class="flex-1 overflow-y-auto pb-32 no-scrollbar">
+         <div class="px-4 mt-4">
             <div class="bg-[#111] border border-[#333] rounded-full px-4 py-3 flex items-center gap-2">
                 <input type="text" placeholder="Find your project" class="bg-transparent w-full outline-none text-sm text-white placeholder-gray-500">
                 <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
             </div>
         </div>
 
-        <div class="flex-1 overflow-y-auto pb-32 no-scrollbar px-2 md:px-4">
-            <div class="bg-[#111] rounded-3xl border border-[#222] overflow-hidden">
-                <table class="w-full results-table border-collapse">
-                    <thead>
-                        <tr>
-                            <th class="w-8 text-center">#</th>
-                            <th class="text-left">Project</th>
-                            <th class="text-center">Network</th>
-                            <th class="hidden md:table-cell text-left">Contract</th>
-                            <th class="hidden md:table-cell text-right">Total votes</th>
-                            <th class="hidden md:table-cell text-right">Votes in 24h</th>
-                            <th class="hidden md:table-cell text-right">Votes in 7d</th>
-                            <th class="hidden md:table-cell text-right">Growth 24h %</th>
-                            <th class="hidden md:table-cell text-center">Social media</th>
-                            <th class="hidden md:table-cell text-center">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody class="text-gray-200">
-                        <tr class="results-row">
-                            <td class="text-center font-bold">1</td>
-                            <td>
-                                <div class="flex items-center gap-3">
-                                    <div class="w-8 h-8 rounded-full overflow-hidden"><img src="https://api.dicebear.com/9.x/bottts-neutral/svg?seed=John" class="w-full h-full object-cover"></div>
-                                    <div>
-                                        <div class="font-bold text-sm">John Davidson</div>
-                                        <div class="text-[10px] text-gray-500 font-mono">0x742d...5e8f</div>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="text-center"><span class="bg-white text-black text-[10px] font-bold px-2 py-1 rounded-full">Ethereum</span></td>
-                            
-                            <td class="hidden md:table-cell text-gray-500 text-xs font-mono">0x742d...5e8f <span class="inline-block cursor-pointer ml-1">❐</span></td>
-                            <td class="hidden md:table-cell text-right font-bold">15,234</td>
-                            <td class="hidden md:table-cell text-right text-green-500 font-medium">+2,543 ↗</td>
-                            <td class="hidden md:table-cell text-right text-red-500 font-medium">-2,543 ↘</td>
-                            <td class="hidden md:table-cell text-right text-green-500 font-bold">+123,45%</td>
-                            <td class="hidden md:table-cell text-center">
-                                <div class="flex justify-center gap-2">
-                                    <div class="w-6 h-6 bg-[#222] rounded flex items-center justify-center text-xs hover:bg-[#333] cursor-pointer"><svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg></div>
-                                    <div class="w-6 h-6 bg-[#222] rounded flex items-center justify-center text-xs hover:bg-[#333] cursor-pointer"><svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></div>
-                                </div>
-                            </td>
-                            <td class="hidden md:table-cell text-center">
-                                <button class="bg-[#e61b28] text-white text-xs px-3 py-1 rounded font-bold hover:bg-red-700">Vote</button>
-                            </td>
-                        </tr>
-                        
-                        <tr class="results-row">
-                            <td class="text-center font-bold">2</td>
-                            <td>
-                                <div class="flex items-center gap-3">
-                                    <div class="w-8 h-8 rounded-full overflow-hidden"><img src="https://api.dicebear.com/9.x/bottts-neutral/svg?seed=Emily" class="w-full h-full object-cover"></div>
-                                    <div>
-                                        <div class="font-bold text-sm">Emily Zhang</div>
-                                        <div class="text-[10px] text-gray-500 font-mono">0x1e5a...8a2c</div>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="text-center"><span class="bg-white text-black text-[10px] font-bold px-2 py-1 rounded-full">Bitcoin</span></td>
-                            <td class="hidden md:table-cell text-gray-500 text-xs font-mono">0x1e5a...8a2c <span class="inline-block cursor-pointer ml-1">❐</span></td>
-                            <td class="hidden md:table-cell text-right font-bold">22,100</td>
-                            <td class="hidden md:table-cell text-right text-green-500 font-medium">+1,200 ↗</td>
-                            <td class="hidden md:table-cell text-right text-red-500 font-medium">-1,200 ↘</td>
-                            <td class="hidden md:table-cell text-right text-green-500 font-bold">+5.70%</td>
-                             <td class="hidden md:table-cell text-center">
-                                <div class="flex justify-center gap-2">
-                                    <div class="w-6 h-6 bg-[#222] rounded flex items-center justify-center text-xs hover:bg-[#333] cursor-pointer"><svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg></div>
-                                    <div class="w-6 h-6 bg-[#222] rounded flex items-center justify-center text-xs hover:bg-[#333] cursor-pointer"><svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></div>
-                                </div>
-                            </td>
-                            <td class="hidden md:table-cell text-center">
-                                <button class="bg-[#e61b28] text-white text-xs px-3 py-1 rounded font-bold hover:bg-red-700">Vote</button>
-                            </td>
-                        </tr>
-                        
-                         <tr class="results-row">
-                            <td class="text-center font-bold">3</td>
-                            <td>
-                                <div class="flex items-center gap-3">
-                                    <div class="w-8 h-8 rounded-full overflow-hidden"><img src="https://api.dicebear.com/9.x/bottts-neutral/svg?seed=Michael" class="w-full h-full object-cover"></div>
-                                    <div>
-                                        <div class="font-bold text-sm">Michael Smith</div>
-                                        <div class="text-[10px] text-gray-500 font-mono">0x3e9a...6f7b</div>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="text-center"><span class="bg-white text-black text-[10px] font-bold px-2 py-1 rounded-full">Litecoin</span></td>
-                             <td class="hidden md:table-cell text-gray-500 text-xs font-mono">0x3e9a...6f7b <span class="inline-block cursor-pointer ml-1">❐</span></td>
-                            <td class="hidden md:table-cell text-right font-bold">4,500</td>
-                            <td class="hidden md:table-cell text-right text-green-500 font-medium">+300 ↗</td>
-                            <td class="hidden md:table-cell text-right text-red-500 font-medium">-300 ↘</td>
-                            <td class="hidden md:table-cell text-right text-green-500 font-bold">+7.14%</td>
-                             <td class="hidden md:table-cell text-center">
-                                <div class="flex justify-center gap-2">
-                                    <div class="w-6 h-6 bg-[#222] rounded flex items-center justify-center text-xs hover:bg-[#333] cursor-pointer"><svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg></div>
-                                    <div class="w-6 h-6 bg-[#222] rounded flex items-center justify-center text-xs hover:bg-[#333] cursor-pointer"><svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></div>
-                                </div>
-                            </td>
-                            <td class="hidden md:table-cell text-center">
-                                <button class="bg-[#e61b28] text-white text-xs px-3 py-1 rounded font-bold hover:bg-red-700">Vote</button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+         <div class="px-4 mt-6">
+            <div class="bg-[#0a0a0a] border border-[#222] rounded-3xl p-4">
+                <div class="grid grid-cols-3 divide-x divide-[#222] mb-4">
+                    <div class="text-center">
+                        <div class="text-[10px] text-gray-500 uppercase tracking-wider mb-1">Date</div>
+                        <div class="text-xl font-bold">14</div>
+                    </div>
+                     <div class="text-center">
+                        <div class="text-[10px] text-gray-500 uppercase tracking-wider mb-1">Month</div>
+                        <div class="text-xl font-bold">11</div>
+                    </div>
+                     <div class="text-center">
+                        <div class="text-[10px] text-gray-500 uppercase tracking-wider mb-1">Year</div>
+                        <div class="text-xl font-bold">2025</div>
+                    </div>
+                </div>
+                <div class="flex justify-between items-center text-gray-500 text-xs font-medium">
+                    <div class="flex flex-col items-center gap-2 opacity-30"><span>Tue</span><span>11</span><span>Nov</span></div>
+                    <div class="flex flex-col items-center gap-2 opacity-50"><span>Wed</span><span>12</span><span>Nov</span></div>
+                    <div class="flex flex-col items-center gap-2 opacity-70"><span>Thu</span><span>13</span><span>Nov</span></div>
+                    <div class="bg-[#e61b28] text-white rounded-xl px-3 py-2 flex flex-col items-center gap-1 shadow-[0_0_15px_rgba(230,27,40,0.4)]">
+                        <span class="text-[10px]">Fri</span>
+                        <span class="text-lg font-bold">14</span>
+                        <span class="text-[10px]">Nov</span>
+                    </div>
+                     <div class="flex flex-col items-center gap-2 opacity-30"><span>Sat</span><span>15</span><span>Nov</span></div>
+                     <div class="flex flex-col items-center gap-2 opacity-20"><span>Sun</span><span>16</span><span>Nov</span></div>
+                     <div class="flex flex-col items-center gap-2 opacity-10"><span>Mon</span><span>17</span><span>Nov</span></div>
+                </div>
             </div>
         </div>
-        
-        <div class="fixed bottom-0 left-0 right-0 mx-auto max-w-md md:max-w-7xl z-50 pointer-events-none">
-             <div class="px-4 mb-20 relative text-center"> 
-                 <button onclick="openRules()" class="w-full md:w-64 bg-[#e61b28] text-white py-4 rounded-full font-bold text-xl shadow-lg flex items-center justify-center gap-2 pointer-events-auto hover:bg-red-700 transition shadow-red-900/50 mx-auto">Publish project <span class="text-2xl font-thin">+</span></button>
+
+        <div class="px-4 mt-6 text-gray-300 text-sm">Best projects for 14 November 2025, Friday:</div>
+
+        <div class="p-4 space-y-4">
+             <div class="bg-[#151515] rounded-3xl p-4 border border-gray-800 relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-48 h-48 bg-orange-600 rounded-full blur-3xl opacity-10 pointer-events-none"></div>
+                <div class="flex justify-between items-start mb-3 relative z-10"><span class="bg-yellow-500 text-black text-xs font-bold px-3 py-1 rounded-full">TOP #1</span><button class="flex items-center gap-1 text-xs text-gray-400 bg-gray-800/50 px-2 py-1 rounded-lg border border-gray-700">Share <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/></svg></button></div>
+                <div class="flex gap-3 items-center mb-4 relative z-10">
+                    <div class="w-16 h-16 bg-orange-500 rounded-full overflow-hidden border-2 border-orange-400 flex-shrink-0"><img src="https://api.dicebear.com/9.x/bottts-neutral/svg?seed=fire" class="w-full h-full object-cover"></div>
+                    <div><div class="bg-white text-black text-[10px] font-bold px-2 py-0.5 rounded inline-flex items-center gap-1 mb-1">Solana <svg class="w-2 h-2" fill="currentColor" viewBox="0 0 20 20"><path d="M3 5h14v2H3V5zm0 8h14v2H3v-2z"/></svg></div><h3 class="text-lg font-bold">SoulVerse RPG</h3><div class="text-gray-500 text-xs flex items-center gap-1">CA: 0x34a9...4a86 <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg></div></div>
+                </div>
+                <div class="flex items-center gap-2 mb-4 relative z-10">
+                    <button class="bg-[#e61b28] text-white px-4 py-1.5 rounded-full text-sm font-bold flex items-center gap-2 flex-1 justify-center hover:bg-red-700">Vote <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"></path></svg></button>
+                    <button onclick="openBoost()" class="bg-[#1f1f1f] text-gray-300 px-4 py-1.5 rounded-full text-sm font-medium border border-gray-700 flex-1 text-center">More info</button>
+                </div>
+                 <div class="grid grid-cols-3 gap-2 relative z-10">
+                    <div class="bg-black/40 p-2 rounded-xl text-center border border-gray-800"><div class="text-[10px] text-gray-400">Transactions</div><div class="text-green-500 font-bold text-sm">+1,6M</div></div>
+                    <div class="bg-black/40 p-2 rounded-xl text-center border border-gray-800"><div class="text-[10px] text-gray-400">Transactions</div><div class="text-green-500 font-bold text-sm">+1,6M</div></div>
+                    <div class="bg-black/40 p-2 rounded-xl text-center border border-gray-800"><div class="text-[10px] text-gray-400">Transactions</div><div class="text-green-500 font-bold text-sm">+1,6M</div></div>
+                </div>
             </div>
-             <div class="bg-black border-t border-gray-800 pb-6 pt-3 px-6 flex justify-between items-center pointer-events-auto max-w-md mx-auto">
-                <div onclick="closeResults()" class="flex flex-col items-center text-gray-500 cursor-pointer"><svg class="h-6 w-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg><span class="text-[10px]">Home</span></div>
-                <div class="flex flex-col items-center text-gray-500"><svg class="h-6 w-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z" /></svg><span class="text-[10px]">BoosT</span></div>
-                <div class="flex flex-col items-center text-red-600"><svg class="h-6 w-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg><span class="text-[10px]">Colosseum</span></div>
-                <div class="flex flex-col items-center text-gray-500"><svg class="h-6 w-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg><span class="text-[10px]">Profile</span></div>
+             <div class="bg-[#151515] rounded-3xl p-4 border border-gray-800 relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-48 h-48 bg-orange-600 rounded-full blur-3xl opacity-10 pointer-events-none"></div>
+                <div class="flex justify-between items-start mb-3 relative z-10"><span class="bg-yellow-500 text-black  text-xs font-bold px-3 py-1 rounded-full">TOP #2</span><button class="flex items-center gap-1 text-xs text-gray-400 bg-gray-800/50 px-2 py-1 rounded-lg border border-gray-700">Share <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/></svg></button></div>
+                <div class="flex gap-3 items-center mb-4 relative z-10">
+                    <div class="w-16 h-16 bg-orange-500 rounded-full overflow-hidden border-2 border-orange-400 flex-shrink-0"><img src="https://api.dicebear.com/9.x/bottts-neutral/svg?seed=Felix" class="w-full h-full object-cover"></div>
+                    <div><div class="bg-white text-black text-[10px] font-bold px-2 py-0.5 rounded inline-flex items-center gap-1 mb-1">Solana <svg class="w-2 h-2" fill="currentColor" viewBox="0 0 20 20"><path d="M3 5h14v2H3V5zm0 8h14v2H3v-2z"/></svg></div><h3 class="text-lg font-bold">SoulVerse RPG</h3><div class="text-gray-500 text-xs flex items-center gap-1">CA: 0x34a9...4a86 <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg></div></div>
+                </div>
+                <div class="flex items-center gap-2 mb-4 relative z-10">
+                    <button class="bg-[#e61b28] text-white px-4 py-1.5 rounded-full text-sm font-bold flex items-center gap-2 flex-1 justify-center hover:bg-red-700">Vote <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"></path></svg></button>
+                     <button onclick="openBoost()" class="bg-[#1f1f1f] text-gray-300 px-4 py-1.5 rounded-full text-sm font-medium border border-gray-700 flex-1 text-center">More info</button>
+                </div>
+                 <div class="grid grid-cols-3 gap-2 relative z-10">
+                    <div class="bg-black/40 p-2 rounded-xl text-center border border-gray-800"><div class="text-[10px] text-gray-400">Transactions</div><div class="text-green-500 font-bold text-sm">+1,6M</div></div>
+                    <div class="bg-black/40 p-2 rounded-xl text-center border border-gray-800"><div class="text-[10px] text-gray-400">Transactions</div><div class="text-green-500 font-bold text-sm">+1,6M</div></div>
+                    <div class="bg-black/40 p-2 rounded-xl text-center border border-gray-800"><div class="text-[10px] text-gray-400">Transactions</div><div class="text-green-500 font-bold text-sm">+1,6M</div></div>
+                </div>
             </div>
-         </div>
+        </div>
     </div>
-
-    <div id="page-boost" class="hidden fixed inset-0 z-[100] bg-black max-w-md mx-auto overflow-y-auto no-scrollbar pb-24">
+    
+    <div class="flex justify-around items-center py-4 bg-black border-t border-gray-800 fixed bottom-0 w-full max-w-md z-50">
+        <a href="index.html" class="flex flex-col items-center gap-1 text-gray-500 hover:text-white transition-colors">
+            <img src="images/home.jpg" alt="Home" class="w-7 h-7">
+            <span class="text-xs">Home</span>
+        </a>
         
-        <div class="w-full h-40 overflow-hidden relative">
-            <img src="https://api.dicebear.com/9.x/bottts-neutral/svg?seed=fire" class="w-full h-[300%] object-cover -mt-12 object-top blur-sm opacity-50 absolute">
-            <img src="https://api.dicebear.com/9.x/bottts-neutral/svg?seed=fire" class="w-64 h-64 object-cover absolute left-1/2 -translate-x-1/2 -top-4">
+        <button class="flex flex-col items-center gap-1 text-boost-red">
+            <div class="relative">
+                <img src="images/boost.jpg" alt="Boost" class="w-7 h-7">
+                <div class="absolute -top-1 -right-1 w-2 h-2 bg-boost-red rounded-full"></div>
+            </div>
+            <span class="text-xs font-semibold">BoosT</span>
+        </button>
+        
+        <a href="colosseum.html" class="flex flex-col items-center gap-1 text-white transition-colors">
+            <img src="images/colosseum.jpg" alt="Colosseum" class="w-7 h-7">
+            <span class="text-xs">Colosseum</span>
+        </a>
+        
+        <button class="flex flex-col items-center gap-1 text-gray-500 hover:text-white transition-colors">
+            <img src="images/profile.jpg" alt="Profile" class="w-7 h-7">
+            <span class="text-xs">Profile</span>
+        </button>
+    </div>
+</div>
+
+<div id="page-results" class="hidden fixed inset-0 z-[70] bg-black max-w-md md:max-w-7xl mx-auto flex flex-col transition-all duration-300">
+     <div class="flex items-center justify-between px-4 py-2 text-xs font-bold bg-black border-b border-gray-800 sticky top-0 z-40">
+        <div class="flex items-center gap-2">
+            <span>#1</span>
+            <div class="w-5 h-5 bg-orange-500 rounded-full overflow-hidden"><img src="https://api.dicebear.com/9.x/avataaars/svg?seed=Felix" alt="avatar"></div>
+            <span>BoostTX • <span class="text-red-500">2,432 🔥</span></span>
         </div>
-
-        <div class="px-4 pt-2">
-            <div class="flex items-center justify-between mb-4">
-                 <div class="flex items-center gap-2 border border-green-500 rounded-full px-4 py-1.5 bg-green-900/10">
-                    <span class="text-green-500 font-medium text-xs">The application has been approved</span>
-                    <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                </div>
-                <svg onclick="openSettings()" class="w-6 h-6 text-white cursor-pointer hover:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-            </div>
-            
-            <div class="flex gap-4 items-start mb-4">
-                <div class="w-20 h-20 bg-orange-500 rounded-full flex-shrink-0 border-2 border-white overflow-hidden"><img src="https://api.dicebear.com/9.x/bottts-neutral/svg?seed=fire" class="w-full h-full object-cover"></div>
-                <div class="flex-1">
-                    <div class="bg-white text-black text-xs font-bold px-3 py-1 rounded-full inline-flex items-center gap-1 mb-2">Solana <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path d="M3 5h14v2H3V5zm0 8h14v2H3v-2z"/></svg></div>
-                    <h2 class="text-2xl font-bold mb-1">BoostTX Project</h2>
-                    <div class="text-gray-500 text-xs mb-3 flex items-center gap-1">CA: 0x34a9...4a86 <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg></div>
-                </div>
-            </div>
-
-            <p class="text-gray-300 text-sm leading-relaxed mb-4">Blockchain analytics automation platform for optimizing on-chain metrics and statistical data growth across networks.</p>
-            
-             <div class="flex gap-3 mb-6">
-                <button class="w-10 h-10 bg-[#1f1f1f] rounded-xl flex items-center justify-center border border-gray-800 hover:bg-gray-800"><svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg></button>
-                <button class="w-10 h-10 bg-[#1f1f1f] rounded-xl flex items-center justify-center border border-gray-800 hover:bg-gray-800"><svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></button>
-                <button class="w-10 h-10 bg-[#1f1f1f] rounded-xl flex items-center justify-center border border-gray-800 hover:bg-gray-800"><svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/></svg></button>
-           </div>
-
-            <div class="flex gap-3 mb-6">
-                 <button class="flex-[2] bg-[#e61b28] text-white font-bold py-3 rounded-2xl flex items-center justify-center gap-2 shadow-lg shadow-red-900/40">Vote <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"></path></svg></button>
-                 <button class="flex-1 bg-[#1f1f1f] text-white font-bold py-3 rounded-2xl border border-gray-800">Follow</button>
-            </div>
-
-            <div class="grid grid-cols-3 gap-3 mb-6">
-                <div class="bg-[#0a0a0a] border border-[#222] rounded-2xl p-3 text-center"><div class="text-[10px] text-gray-400 mb-1">Transactions <br>(24h)</div><div class="text-green-500 font-bold text-lg">+1,6M</div></div>
-                <div class="bg-[#0a0a0a] border border-[#222] rounded-2xl p-3 text-center"><div class="text-[10px] text-gray-400 mb-1">Transactions <br>(24h)</div><div class="text-green-500 font-bold text-lg">+1,6M</div></div>
-                <div class="bg-[#0a0a0a] border border-[#222] rounded-2xl p-3 text-center"><div class="text-[10px] text-gray-400 mb-1">Transactions <br>(24h)</div><div class="text-green-500 font-bold text-lg">+1,6M</div></div>
-            </div>
-
-             <div class="flex items-center justify-between mb-2">
-                <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                 <div class="flex items-center gap-4 text-sm text-gray-400">
-                    <span>1s</span><span>1m</span><span>5m</span><span>15m</span><span class="text-[#5c7aff] font-bold">1h</span><span>4h</span><span>D</span>
-                </div>
-                <div class="flex items-center gap-2">
-                     <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
-                </div>
-            </div>
-
-             <div class="bg-black border border-[#222] rounded-none pt-2 relative h-[300px] flex">
-                 <div class="w-10 flex flex-col items-center gap-4 pt-2 border-r border-[#222] text-gray-500">
-                     <div class="w-4 h-4 border-b border-r border-gray-500 cursor-pointer"></div>
-                     <div class="w-4 h-0.5 bg-gray-500 -rotate-45 cursor-pointer"></div>
-                     <div class="flex flex-col gap-0.5 cursor-pointer"><div class="w-4 h-0.5 bg-gray-500"></div><div class="w-4 h-0.5 bg-gray-500"></div><div class="w-4 h-0.5 bg-gray-500"></div></div>
-                 </div>
-
-                 <div class="flex-1 relative p-2 overflow-hidden">
-                     <div class="absolute top-2 left-2 z-10">
-                        <div class="text-sm font-bold text-gray-200 flex items-center gap-2">POPFR... <span class="text-xs font-normal text-gray-500">• 1h • d...</span> <span class="w-2 h-2 rounded-full bg-green-500"></span></div>
-                        <div class="text-xs text-red-500 mt-1">0.001616 <span class="text-gray-600">-0.0001949 (-10.77%)</span></div>
-                        <div class="text-xs text-gray-400 mt-1 font-mono">Volume <span class="text-white">^</span></div>
-                    </div>
-                     <div class="absolute inset-0 grid grid-rows-4 grid-cols-4 opacity-10 pointer-events-none"><div class="border-b border-r border-gray-500"></div></div>
-                     
-                     <div class="absolute bottom-8 left-12 flex items-end gap-1 h-48">
-                        <div class="chart-candle-red h-10 mb-8"></div>
-                        <div class="chart-candle-green h-14 mb-10"></div>
-                        <div class="chart-candle-red h-8 mb-16"></div>
-                        <div class="chart-candle-green h-20 mb-8"></div>
-                        <div class="chart-candle-green h-12 mb-18"></div>
-                        <div class="chart-candle-red h-6 mb-22"></div>
-                        <div class="chart-candle-green h-24 mb-16"></div>
-                        <div class="chart-candle-green h-32 mb-18"></div>
-                        <div class="chart-candle-green h-12 mb-40"></div>
-                    </div>
-                    <div class="absolute right-0 top-24 bg-red-600 text-white text-[10px] px-1 py-0.5 font-bold z-20">0.001616</div>
-                    <div class="absolute right-0 top-24 w-full border-t border-dashed border-red-600 opacity-50 pointer-events-none"></div>
-
-                    <div class="absolute bottom-1 w-full flex justify-between text-[10px] text-gray-400 px-2">
-                        <span>6:00</span>
-                        <span class="text-white font-bold">14</span>
-                        <span>15:00</span>
-                    </div>
-                </div>
-
-                 <div class="w-14 border-l border-[#222] flex flex-col justify-between py-4 text-[10px] text-gray-400 px-1 text-right">
-                    <span>0.002000</span>
-                    <span class="text-white bg-red-600 px-1 rounded-sm">0.001616</span>
-                    <span>0.001000</span>
-                    <span>0.0000</span>
-                </div>
-             </div>
-              <div class="flex justify-between items-center px-2 py-2 bg-black text-xs text-gray-400 border border-t-0 border-[#222]">
-                 <span>Date Range v</span>
-                 <span>07:15:06 (UTC+3)</span>
-                 <span class="text-[#5c7aff]">auto</span>
-             </div>
-        </div>
-
-        <div class="bg-black border-t border-gray-800 pb-6 pt-3 px-6 flex justify-between items-center fixed bottom-0 w-full max-w-md z-[110]">
-            <div onclick="closeProject()" class="flex flex-col items-center text-gray-500 cursor-pointer"><svg class="h-6 w-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg><span class="text-[10px]">Home</span></div>
-            <div class="flex flex-col items-center text-red-600 cursor-pointer"><svg class="h-6 w-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z" /></svg><span class="text-[10px]">BoosT</span></div>
-            <div onclick="closeProject()" class="flex flex-col items-center text-gray-500 cursor-pointer"><svg class="h-6 w-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg><span class="text-[10px]">Colosseum</span></div>
-            <div class="flex flex-col items-center text-gray-500 cursor-pointer"><svg class="h-6 w-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg><span class="text-[10px]">Profile</span></div>
+         <div class="flex items-center gap-2 opacity-50">
+            <span>#1</span>
+            <div class="w-5 h-5 bg-orange-500 rounded-full overflow-hidden"><img src="https://api.dicebear.com/9.x/avataaars/svg?seed=Felix" alt="avatar"></div>
+            <span>BoosT</span>
         </div>
     </div>
 
-    <div id="page-edit" class="hidden fixed inset-0 z-[120] bg-black max-w-md mx-auto overflow-y-auto no-scrollbar pb-32">
-        <div class="px-4 pt-6">
-            <h2 class="text-center text-2xl font-bold mb-6">Edit your project</h2>
-            
-            <div class="flex flex-col items-center gap-2 mb-6">
-                <div class="w-24 h-24 bg-[#e61b28] rounded-full flex items-center justify-center cursor-pointer shadow-[0_0_20px_rgba(230,27,40,0.3)] relative">
-                    <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                    <div class="absolute bottom-2 right-2 text-white drop-shadow-md"><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"></path></svg></div>
-                </div>
-                <span class="text-xs text-gray-400">Set up avatar</span>
-            </div>
+    <div class="pt-6 pb-2 text-center bg-black z-30 relative">
+        <h1 class="text-2xl font-bold flex items-center justify-center gap-2">The Colosseum <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z" /></svg></h1>
+        <p class="text-gray-400 text-sm">Results sheet</p>
+    </div>
 
-            <div class="flex flex-col items-center gap-2 mb-8">
-                <div class="w-full h-32 bg-[#e61b28] rounded-3xl flex items-center justify-center cursor-pointer shadow-[0_0_20px_rgba(230,27,40,0.3)] relative">
-                     <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                     <div class="absolute bottom-2 right-1/2 translate-x-8 translate-y-2 text-white drop-shadow-md"><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"></path></svg></div>
-                </div>
-                <span class="text-xs text-gray-400">Set up banner (ratio 3:1)</span>
-            </div>
+    <div class="flex mt-4 border-b border-gray-800 sticky top-8 bg-black z-30">
+         <div onclick="closeResults()" class="flex-1 flex justify-center pb-3 border-b-2 border-transparent text-gray-500 cursor-pointer hover:text-white transition">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
+        </div>
+        <div class="flex-1 flex justify-center pb-3 border-b-2 border-red-600 cursor-pointer">
+             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" /></svg>
+        </div>
+    </div>
 
-            <div class="input-group"><input type="text" placeholder="Enter name" class="custom-input"></div>
-            
-            <div class="input-group justify-between cursor-pointer" onclick="openNetworkModal('edit')">
-                <div class="flex items-center gap-2">
-                    <div id="edit-net-icon" class="w-5 h-5 flex items-center justify-center"><img src="images/eth.png" class="w-full h-full object-contain"></div>
-                    <span id="edit-net-name" class="bg-white text-black px-2 py-0.5 rounded font-bold text-sm">Ethereum</span>
-                </div>
-                <div class="flex items-center gap-2">
-                    <span id="edit-net-std" class="text-gray-400 text-sm">ERC20</span>
-                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                </div>
-            </div>
-            
-            <div class="input-group"><input type="text" placeholder="0x742d...5e8f" class="custom-input text-xs font-mono"></div>
-            
-            <div class="input-group">
-                <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
-                <input type="text" placeholder="Your Telegram channel link" class="custom-input text-right">
-            </div>
-            <div class="input-group">
-                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/></svg>
-                <input type="text" placeholder="Your website link" class="custom-input text-right">
-            </div>
-             <div class="input-group">
-                <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-                <input type="text" placeholder="https://x.com" class="custom-input text-right">
-            </div>
-            
-            <div class="relative mb-8">
-                <div class="bg-[#0a0a0a] border border-[#333] rounded-2xl p-4 pb-8">
-                    <textarea class="w-full bg-transparent text-white text-sm outline-none resize-none h-20" placeholder="My project description"></textarea>
-                </div>
-                <span class="absolute bottom-2 right-4 text-xs text-gray-500">0 / 120</span>
-                 <div class="absolute bottom-0 left-0 w-full h-[1px] bg-red-600 rounded-b-2xl"></div>
-            </div>
+     <div class="px-4 mt-4 mb-4">
+        <div class="bg-[#111] border border-[#333] rounded-full px-4 py-3 flex items-center gap-2">
+            <input type="text" placeholder="Find your project" class="bg-transparent w-full outline-none text-sm text-white placeholder-gray-500">
+            <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+        </div>
+    </div>
 
-            <button onclick="closeSettings()" class="w-full bg-[#e61b28] text-white py-3.5 rounded-full font-bold text-lg mb-8 shadow-lg shadow-red-900/40">Continue</button>
-            
-            <div class="bg-[#0a0a0a] rounded-3xl p-6 border border-[#151515]">
-                <h3 class="text-red-600 font-bold text-center mb-4">Danger zone</h3>
-                <button onclick="openDeleteModal()" class="w-full border border-[#333] bg-[#111] text-gray-300 py-3 rounded-full flex items-center justify-between px-6 hover:bg-red-900/20 transition">
-                    <span>Delete project</span>
-                    <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+    <div class="flex-1 overflow-y-auto pb-36 no-scrollbar px-2 md:px-4">
+        <div class="bg-[#111] rounded-3xl border border-[#222] overflow-hidden">
+            <table class="w-full results-table border-collapse">
+                <thead>
+                    <tr>
+                        <th class="w-8 text-center">#</th>
+                        <th class="text-left">Project</th>
+                        <th class="text-center">Network</th>
+                        <th class="hidden md:table-cell text-left">Contract</th>
+                        <th class="hidden md:table-cell text-right">Total votes</th>
+                        <th class="hidden md:table-cell text-right">Votes in 24h</th>
+                        <th class="hidden md:table-cell text-right">Votes in 7d</th>
+                        <th class="hidden md:table-cell text-right">Growth 24h %</th>
+                        <th class="hidden md:table-cell text-center">Social media</th>
+                        <th class="hidden md:table-cell text-center">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="text-gray-200">
+                    <tr class="results-row">
+                        <td class="text-center font-bold">1</td>
+                        <td>
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 rounded-full overflow-hidden"><img src="https://api.dicebear.com/9.x/bottts-neutral/svg?seed=John" class="w-full h-full object-cover"></div>
+                                <div>
+                                    <div class="font-bold text-sm">John Davidson</div>
+                                    <div class="text-[10px] text-gray-500 font-mono">0x742d...5e8f</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="text-center"><span class="bg-white text-black text-[10px] font-bold px-2 py-1 rounded-full">Ethereum</span></td>
+                        
+                        <td class="hidden md:table-cell text-gray-500 text-xs font-mono">0x742d...5e8f <span class="inline-block cursor-pointer ml-1">❐</span></td>
+                        <td class="hidden md:table-cell text-right font-bold">15,234</td>
+                        <td class="hidden md:table-cell text-right text-green-500 font-medium">+2,543 ↗</td>
+                        <td class="hidden md:table-cell text-right text-red-500 font-medium">-2,543 ↘</td>
+                        <td class="hidden md:table-cell text-right text-green-500 font-bold">+123,45%</td>
+                        <td class="hidden md:table-cell text-center">
+                            <div class="flex justify-center gap-2">
+                                <div class="w-6 h-6 bg-[#222] rounded flex items-center justify-center text-xs hover:bg-[#333] cursor-pointer"><svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg></div>
+                                <div class="w-6 h-6 bg-[#222] rounded flex items-center justify-center text-xs hover:bg-[#333] cursor-pointer"><svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></div>
+                            </div>
+                        </td>
+                        <td class="hidden md:table-cell text-center">
+                            <button class="bg-[#e61b28] text-white text-xs px-3 py-1 rounded font-bold hover:bg-red-700">Vote</button>
+                        </td>
+                    </tr>
+                    
+                    <tr class="results-row">
+                        <td class="text-center font-bold">2</td>
+                        <td>
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 rounded-full overflow-hidden"><img src="https://api.dicebear.com/9.x/bottts-neutral/svg?seed=Emily" class="w-full h-full object-cover"></div>
+                                <div>
+                                    <div class="font-bold text-sm">Emily Zhang</div>
+                                    <div class="text-[10px] text-gray-500 font-mono">0x1e5a...8a2c</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="text-center"><span class="bg-white text-black text-[10px] font-bold px-2 py-1 rounded-full">Bitcoin</span></td>
+                        <td class="hidden md:table-cell text-gray-500 text-xs font-mono">0x1e5a...8a2c <span class="inline-block cursor-pointer ml-1">❐</span></td>
+                        <td class="hidden md:table-cell text-right font-bold">22,100</td>
+                        <td class="hidden md:table-cell text-right text-green-500 font-medium">+1,200 ↗</td>
+                        <td class="hidden md:table-cell text-right text-red-500 font-medium">-1,200 ↘</td>
+                        <td class="hidden md:table-cell text-right text-green-500 font-bold">+5.70%</td>
+                         <td class="hidden md:table-cell text-center">
+                            <div class="flex justify-center gap-2">
+                                <div class="w-6 h-6 bg-[#222] rounded flex items-center justify-center text-xs hover:bg-[#333] cursor-pointer"><svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg></div>
+                                <div class="w-6 h-6 bg-[#222] rounded flex items-center justify-center text-xs hover:bg-[#333] cursor-pointer"><svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></div>
+                            </div>
+                        </td>
+                        <td class="hidden md:table-cell text-center">
+                            <button class="bg-[#e61b28] text-white text-xs px-3 py-1 rounded font-bold hover:bg-red-700">Vote</button>
+                        </td>
+                    </tr>
+                    
+                     <tr class="results-row">
+                        <td class="text-center font-bold">3</td>
+                        <td>
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 rounded-full overflow-hidden"><img src="https://api.dicebear.com/9.x/bottts-neutral/svg?seed=Michael" class="w-full h-full object-cover"></div>
+                                <div>
+                                    <div class="font-bold text-sm">Michael Smith</div>
+                                    <div class="text-[10px] text-gray-500 font-mono">0x3e9a...6f7b</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="text-center"><span class="bg-white text-black text-[10px] font-bold px-2 py-1 rounded-full">Litecoin</span></td>
+                         <td class="hidden md:table-cell text-gray-500 text-xs font-mono">0x3e9a...6f7b <span class="inline-block cursor-pointer ml-1">❐</span></td>
+                        <td class="hidden md:table-cell text-right font-bold">4,500</td>
+                        <td class="hidden md:table-cell text-right text-green-500 font-medium">+300 ↗</td>
+                        <td class="hidden md:table-cell text-right text-red-500 font-medium">-300 ↘</td>
+                        <td class="hidden md:table-cell text-right text-green-500 font-bold">+7.14%</td>
+                         <td class="hidden md:table-cell text-center">
+                            <div class="flex justify-center gap-2">
+                                <div class="w-6 h-6 bg-[#222] rounded flex items-center justify-center text-xs hover:bg-[#333] cursor-pointer"><svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg></div>
+                                <div class="w-6 h-6 bg-[#222] rounded flex items-center justify-center text-xs hover:bg-[#333] cursor-pointer"><svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></div>
+                            </div>
+                        </td>
+                        <td class="hidden md:table-cell text-center">
+                            <button class="bg-[#e61b28] text-white text-xs px-3 py-1 rounded font-bold hover:bg-red-700">Vote</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <div class="fixed bottom-0 left-0 right-0 mx-auto max-w-md md:max-w-7xl z-50 pointer-events-none">
+         <div class="px-4 mb-4 relative text-center"> 
+             <button onclick="openPublish()" class="w-full md:w-64 bg-[#e61b28] text-white py-4 rounded-full font-bold text-xl shadow-lg flex items-center justify-center gap-2 pointer-events-auto hover:bg-red-700 transition shadow-red-900/50 mx-auto">Publish project <span class="text-2xl font-thin">+</span></button>
+        </div>
+         <div class="bg-black border-t border-gray-800 pb-6 pt-4 px-6 flex justify-between items-center pointer-events-auto max-w-md mx-auto">
+            <a href="index.html" onclick="closeResults()" class="flex flex-col items-center text-gray-500 cursor-pointer">
+                <img src="images/home.jpg" alt="Home" class="w-7 h-7 mb-1">
+                <span class="text-[10px]">Home</span>
+            </a>
+            <div class="flex flex-col items-center text-boost-red">
+                <img src="images/boost.jpg" alt="Boost" class="w-7 h-7 mb-1">
+                <span class="text-[10px]">BoosT</span>
+            </div>
+            <a href="colosseum.html" class="flex flex-col items-center text-white">
+                <img src="images/colosseum.jpg" alt="Colosseum" class="w-7 h-7 mb-1">
+                <span class="text-[10px]">Colosseum</span>
+            </a>
+            <div class="flex flex-col items-center text-gray-500">
+                <img src="images/profile.jpg" alt="Profile" class="w-7 h-7 mb-1">
+                <span class="text-[10px]">Profile</span>
+            </div>
+        </div>
+     </div>
+</div>
+
+<div id="page-boost" class="hidden fixed inset-0 z-[100] bg-black max-w-md mx-auto overflow-y-auto no-scrollbar pb-24">
+    
+    <div class="w-full h-40 overflow-hidden relative">
+        <img src="https://api.dicebear.com/9.x/bottts-neutral/svg?seed=fire" class="w-full h-[300%] object-cover -mt-12 object-top blur-sm opacity-50 absolute">
+        <img src="https://api.dicebear.com/9.x/bottts-neutral/svg?seed=fire" class="w-64 h-64 object-cover absolute left-1/2 -translate-x-1/2 -top-4">
+    </div>
+
+    <div class="px-4 pt-2 pb-24">
+        <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center gap-2 border border-green-500 rounded-full px-3 py-1 bg-green-900/10">
+                <span class="text-green-500 font-medium text-[10px]">Approved</span>
+                <svg class="w-3 h-3 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            </div>
+            <svg onclick="openSettings()" class="w-5 h-5 text-white cursor-pointer hover:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+        </div>
+        
+        <div class="flex gap-3 items-start mb-3">
+            <div class="w-16 h-16 bg-orange-500 rounded-full flex-shrink-0 border-2 border-orange-400 overflow-hidden">
+                <img src="https://api.dicebear.com/9.x/bottts-neutral/svg?seed=fire" class="w-full h-full object-cover">
+            </div>
+            <div class="flex-1 min-w-0">
+                <div class="bg-white text-black text-[9px] font-bold px-2 py-0.5 rounded-full inline-flex items-center gap-1 mb-1">
+                    Solana 
+                    <svg class="w-2 h-2" fill="currentColor" viewBox="0 0 20 20"><path d="M3 5h14v2H3V5zm0 8h14v2H3v-2z"/></svg>
+                </div>
+                <h2 class="text-xl font-bold mb-0.5 truncate">BoostTX Project</h2>
+                <div class="text-gray-500 text-[10px] flex items-center gap-1">
+                    CA: 0x34a9...4a86 
+                    <svg class="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                </div>
+            </div>
+        </div>
+
+        <p class="text-gray-400 text-xs leading-relaxed mb-3">Blockchain analytics automation platform for optimizing on-chain metrics and data growth.</p>
+        
+        <div class="flex gap-2 mb-3">
+            <a href="#" class="w-9 h-9 bg-[#0a0a0a] border border-[#222] rounded-lg flex items-center justify-center hover:bg-[#111] transition">
+                <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+                </svg>
+            </a>
+            <a href="#" class="w-9 h-9 bg-[#0a0a0a] border border-[#222] rounded-lg flex items-center justify-center hover:bg-[#111] transition">
+                <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                </svg>
+            </a>
+            <a href="#" class="w-9 h-9 bg-[#0a0a0a] border border-[#222] rounded-lg flex items-center justify-center hover:bg-[#111] transition">
+                <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/>
+                </svg>
+            </a>
+            <button class="ml-auto px-3 h-9 bg-[#0a0a0a] border border-[#222] rounded-lg text-xs text-gray-400 hover:text-white hover:bg-[#111] transition flex items-center gap-1.5">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/>
+                </svg>
+                Share
+            </button>
+        </div>
+
+        <div class="grid grid-cols-2 gap-2 mb-3">
+            <div class="bg-[#0a0a0a] border border-[#222] rounded-xl p-2.5">
+                <div class="text-gray-500 text-[9px] mb-0.5">Market Cap</div>
+                <div class="text-white font-bold text-sm">$2.4M</div>
+                <div class="text-green-500 text-[9px]">+15.3%</div>
+            </div>
+            <div class="bg-[#0a0a0a] border border-[#222] rounded-xl p-2.5">
+                <div class="text-gray-500 text-[9px] mb-0.5">24h Volume</div>
+                <div class="text-white font-bold text-sm">$847K</div>
+                <div class="text-red-500 text-[9px]">-8.2%</div>
+            </div>
+            <div class="bg-[#0a0a0a] border border-[#222] rounded-xl p-2.5">
+                <div class="text-gray-500 text-[9px] mb-0.5">Holders</div>
+                <div class="text-white font-bold text-sm">3,248</div>
+                <div class="text-green-500 text-[9px]">+122</div>
+            </div>
+            <div class="bg-[#0a0a0a] border border-[#222] rounded-xl p-2.5">
+                <div class="text-gray-500 text-[9px] mb-0.5">Supply</div>
+                <div class="text-white font-bold text-sm">100M</div>
+                <div class="text-gray-500 text-[9px]">Fixed</div>
+            </div>
+        </div>
+
+        <div class="bg-[#0a0a0a] border border-[#222] rounded-xl p-3 mb-3">
+            <div class="flex items-center justify-between mb-2">
+                <div>
+                    <div class="text-gray-500 text-[9px] mb-0.5">Current Price</div>
+                    <div class="text-white font-bold text-xl">$0.024</div>
+                </div>
+                <div class="text-right">
+                    <div class="text-green-500 font-bold text-lg">+12.5%</div>
+                    <div class="text-gray-500 text-[9px]">24h</div>
+                </div>
+            </div>
+            <div class="flex gap-2">
+                <button class="flex-1 bg-[#e61b28] text-white py-2 rounded-lg font-bold text-xs hover:bg-red-700 transition">
+                    Buy
+                </button>
+                <button class="flex-1 bg-[#111] border border-[#333] text-white py-2 rounded-lg font-bold text-xs hover:bg-[#1a1a1a] transition">
+                    Trade
                 </button>
             </div>
         </div>
-
-        <div class="bg-black border-t border-gray-800 pb-6 pt-3 px-6 flex justify-between items-center fixed bottom-0 w-full max-w-md z-[130]">
-            <div onclick="closeSettings(); closeProject()" class="flex flex-col items-center text-gray-500 cursor-pointer"><svg class="h-6 w-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg><span class="text-[10px]">Home</span></div>
-            <div class="flex flex-col items-center text-red-600 cursor-pointer"><svg class="h-6 w-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z" /></svg><span class="text-[10px]">BoosT</span></div>
-            <div onclick="closeSettings(); closeProject()" class="flex flex-col items-center text-gray-500 cursor-pointer"><svg class="h-6 w-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg><span class="text-[10px]">Colosseum</span></div>
-            <div class="flex flex-col items-center text-gray-500 cursor-pointer"><svg class="h-6 w-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg><span class="text-[10px]">Profile</span></div>
+        
+        <div class="mb-3">
+            <div class="flex items-center justify-between mb-2">
+                <h3 class="text-white font-bold text-sm">Price Chart</h3>
+                <div class="flex gap-1">
+                    <button class="px-2 py-0.5 bg-[#0a0a0a] border border-[#222] rounded text-[10px] text-gray-400 hover:text-white hover:border-[#e61b28] transition">1H</button>
+                    <button class="px-2 py-0.5 bg-[#0a0a0a] border border-[#e61b28] rounded text-[10px] text-white transition">24H</button>
+                    <button class="px-2 py-0.5 bg-[#0a0a0a] border border-[#222] rounded text-[10px] text-gray-400 hover:text-white hover:border-[#e61b28] transition">7D</button>
+                    <button class="px-2 py-0.5 bg-[#0a0a0a] border border-[#222] rounded text-[10px] text-gray-400 hover:text-white hover:border-[#e61b28] transition">30D</button>
+                </div>
+            </div>
+            <div id="chart-area" class="w-full h-64 bg-[#0a0a0a] rounded-2xl border border-[#222]"></div>
         </div>
+
+        <button class="w-full bg-gradient-to-r from-[#e61b28] to-[#ff3347] text-white py-3 rounded-xl font-bold text-sm shadow-lg shadow-red-900/50 hover:shadow-red-900/70 transition flex items-center justify-center gap-2 mb-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"/>
+            </svg>
+            Vote for this project
+            <span class="bg-white/20 px-2 py-0.5 rounded-full text-[10px]">2.5K</span>
+        </button>
     </div>
 
-    <div id="modal-delete" class="hidden fixed inset-0 z-[150] blur-backdrop flex items-center justify-center p-4">
-        <div class="bg-[#0a0a0a] w-full max-w-sm rounded-3xl p-6 border border-[#222] relative">
-            <h3 class="text-red-600 font-bold text-xl text-center mb-2 leading-tight">Are you really ready to delete your project?</h3>
-            <p class="text-gray-400 text-xs text-center mb-6">After deletion, it will be impossible to restore.</p>
-            <p class="text-white text-center mb-2 text-sm">Enter the <span class="font-bold">FULL</span> name of the project to delete</p>
-            <div class="input-group border border-[#333] bg-[#111] rounded-xl mb-6"><input type="text" placeholder="Enter project name" class="custom-input text-center"></div>
-            <button onclick="closeDeleteModal()" class="w-full border border-[#333] bg-transparent text-gray-400 py-3 rounded-full flex items-center justify-center gap-2 hover:bg-white/5 transition">
-                <span>Delete project</span> <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+    <div class="bg-black border-t border-gray-800 pb-6 pt-4 px-6 flex justify-between items-center fixed bottom-0 w-full max-w-md z-[110]">
+        <a href="index.html" onclick="closeBoost()" class="flex flex-col items-center text-gray-500 cursor-pointer">
+            <img src="images/home.jpg" alt="Home" class="w-7 h-7 mb-1">
+            <span class="text-[10px]">Home</span>
+        </a>
+        <div class="flex flex-col items-center text-red-600 cursor-pointer">
+            <img src="images/boost.jpg" alt="Boost" class="w-7 h-7 mb-1">
+            <span class="text-[10px]">BoosT</span>
+        </div>
+        <a href="colosseum.html" onclick="closeBoost()" class="flex flex-col items-center text-gray-500 cursor-pointer">
+            <img src="images/colosseum.jpg" alt="Colosseum" class="w-7 h-7 mb-1">
+            <span class="text-[10px]">Colosseum</span>
+        </a>
+        <div class="flex flex-col items-center text-gray-500 cursor-pointer">
+            <img src="images/profile.jpg" alt="Profile" class="w-7 h-7 mb-1">
+            <span class="text-[10px]">Profile</span>
+        </div>
+    </div>
+</div>
+
+<div id="page-edit" class="hidden fixed inset-0 z-[120] bg-black max-w-md mx-auto overflow-y-auto no-scrollbar pb-36">
+    <div class="px-4 pt-6">
+        <h2 class="text-center text-2xl font-bold mb-6">Edit your project</h2>
+        
+        <div class="flex flex-col items-center gap-2 mb-6">
+            <div class="w-24 h-24 bg-[#e61b28] rounded-full flex items-center justify-center cursor-pointer shadow-[0_0_20px_rgba(230,27,40,0.3)] relative">
+                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+            </div>
+            <span class="text-xs text-gray-400">Set up avatar</span>
+        </div>
+
+        <div class="flex flex-col items-center gap-2 mb-8">
+            <div class="w-full h-32 bg-[#e61b28] rounded-3xl flex items-center justify-center cursor-pointer shadow-[0_0_20px_rgba(230,27,40,0.3)] relative">
+                 <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+            </div>
+            <span class="text-xs text-gray-400">Set up banner (ratio 3:1)</span>
+        </div>
+
+        <div class="input-group"><input type="text" placeholder="Enter name" class="custom-input"></div>
+        
+        <div class="input-group justify-between cursor-pointer" onclick="openNetworkModal('edit')">
+            <div class="flex items-center gap-2">
+                <div id="edit-net-icon" class="w-5 h-5 flex items-center justify-center"><img src="images/eth.png" class="w-full h-full object-contain"></div>
+                <span id="edit-net-name" class="bg-white text-black px-2 py-0.5 rounded font-bold text-sm">Ethereum</span>
+            </div>
+            <div class="flex items-center gap-2">
+                <span id="edit-net-std" class="text-gray-400 text-sm">ERC20</span>
+                <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </div>
+        </div>
+        
+        <div class="input-group"><input type="text" placeholder="0x742d...5e8f" class="custom-input text-xs font-mono"></div>
+        
+        <div class="input-group">
+            <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+            <input type="text" placeholder="Your Telegram channel link" class="custom-input text-right">
+        </div>
+        <div class="input-group">
+            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/></svg>
+            <input type="text" placeholder="Your website link" class="custom-input text-right">
+        </div>
+         <div class="input-group">
+            <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+            <input type="text" placeholder="https://x.com" class="custom-input text-right">
+        </div>
+        
+        <div class="relative mb-8">
+            <div class="bg-[#0a0a0a] border border-[#333] rounded-2xl p-4 pb-8">
+                <textarea class="w-full bg-transparent text-white text-sm outline-none resize-none h-20" placeholder="My project description"></textarea>
+            </div>
+            <span class="absolute bottom-2 right-4 text-xs text-gray-500">0 / 120</span>
+             <div class="absolute bottom-0 left-0 w-full h-[1px] bg-red-600 rounded-b-2xl"></div>
+        </div>
+
+        <button onclick="closeSettings()" class="w-full bg-[#e61b28] text-white py-3.5 rounded-full font-bold text-lg mb-8 shadow-lg shadow-red-900/40">Continue</button>
+        
+        <div class="bg-[#0a0a0a] rounded-3xl p-6 border border-[#151515]">
+            <h3 class="text-red-600 font-bold text-center mb-4">Danger zone</h3>
+            <button onclick="openDeleteModal()" class="w-full border border-[#333] bg-[#111] text-gray-300 py-3 rounded-full flex items-center justify-between px-6 hover:bg-red-900/20 transition">
+                <span>Delete project</span>
+                <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
             </button>
         </div>
     </div>
 
-    <div id="page-rules" class="hidden fixed inset-0 z-[160] bg-black max-w-md mx-auto flex flex-col">
+    <div class="bg-black border-t border-gray-800 pb-6 pt-4 px-6 flex justify-between items-center fixed bottom-0 w-full max-w-md z-[130]">
+        <a href="index.html" onclick="closeSettings(); closeBoost()" class="flex flex-col items-center text-gray-500 cursor-pointer">
+            <img src="images/home.jpg" alt="Home" class="w-7 h-7 mb-1">
+            <span class="text-[10px]">Home</span>
+        </a>
+        <div class="flex flex-col items-center text-red-600 cursor-pointer">
+            <img src="images/boost.jpg" alt="Boost" class="w-7 h-7 mb-1">
+            <span class="text-[10px]">BoosT</span>
+        </div>
+        <a href="colosseum.html" onclick="closeSettings(); closeBoost()" class="flex flex-col items-center text-gray-500 cursor-pointer">
+            <img src="images/colosseum.jpg" alt="Colosseum" class="w-7 h-7 mb-1">
+            <span class="text-[10px]">Colosseum</span>
+        </a>
+        <div class="flex flex-col items-center text-gray-500 cursor-pointer">
+            <img src="images/profile.jpg" alt="Profile" class="w-7 h-7 mb-1">
+            <span class="text-[10px]">Profile</span>
+        </div>
+    </div>
+</div>
+
+<div id="modal-delete" class="hidden fixed inset-0 z-[150] blur-backdrop flex items-center justify-center p-4">
+    <div class="bg-[#0a0a0a] w-full max-w-sm rounded-3xl p-6 border border-[#222] relative">
+        <h3 class="text-red-600 font-bold text-xl text-center mb-2 leading-tight">Are you really ready to delete your project?</h3>
+        <p class="text-gray-400 text-xs text-center mb-6">After deletion, it will be impossible to restore.</p>
+        <p class="text-white text-center mb-2 text-sm">Enter the <span class="font-bold">FULL</span> name of the project to delete</p>
+        <div class="input-group border border-[#333] bg-[#111] rounded-xl mb-6"><input type="text" placeholder="Enter project name" class="custom-input text-center"></div>
+        <button onclick="closeDeleteModal()" class="w-full border border-[#333] bg-transparent text-gray-400 py-3 rounded-full flex items-center justify-center gap-2 hover:bg-white/5 transition">
+            <span>Delete project</span> <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+        </button>
+    </div>
+</div>
+
+<div id="page-rules" class="fixed inset-0 z-[999] bg-black max-w-md mx-auto flex flex-col" style="display: none;">
     <div class="p-4 text-center border-b border-gray-800 bg-black sticky top-0">
         <h2 class="text-xl font-bold text-white">The Colosseum Rules</h2>
     </div>
 
-    <div class="flex-1 overflow-y-auto p-4 space-y-6 text-gray-300 text-sm leading-relaxed pb-32">
+    <div class="flex-1 overflow-y-auto p-4 space-y-6 text-gray-300 text-sm leading-relaxed pb-36">
         
         <div>
             <h3 class="font-bold text-white mb-2">1. General provisions</h3>
@@ -626,7 +773,7 @@
                 <li>Specify the correct ticker and contract address;</li>
                 <li>Upload the project's logo and banner;</li>
                 <li>Fill in the project description;</li>
-                <li>Provide a valid contact for communication: Telegram or Twitter;</li>
+                <li>Provide a  valid contact for communication: Telegram or Twitter;</li>
                 <li>Wait for the token to be approved for participation: Share a link to vote.</li>
             </ul>
             
@@ -688,176 +835,282 @@
             <p>7.1. By participating in the Contest, the user agrees to these Rules and undertakes to provide reliable contact information for communication.</p>
         </div>
     </div>
-        <div class="p-4 bg-black border-t border-gray-800 absolute bottom-0 w-full">
-            <label class="flex items-start gap-3 mb-4 cursor-pointer custom-checkbox">
-                <input type="checkbox" id="rules-checkbox" class="hidden" onchange="toggleRulesButton()">
-                <div class="w-5 h-5 border border-gray-500 rounded bg-transparent flex items-center justify-center flex-shrink-0"><svg class="hidden w-3 h-3 text-white pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg></div>
-                <span class="text-xs text-gray-400">I have read the rules of the "The Colosseum" section and agree with them.</span>
-            </label>
-            <button id="rules-btn" onclick="submitRules()" disabled class="w-full bg-[#e61b28] text-white py-3.5 rounded-full font-bold text-lg opacity-50 cursor-not-allowed transition">Continue</button>
-        </div>
+    
+    <div class="p-4 bg-black border-t border-gray-800 fixed bottom-0 w-full max-w-md">
+        <label class="flex items-start gap-3 mb-4 cursor-pointer custom-checkbox">
+            <input type="checkbox" id="rules-checkbox" class="hidden" onchange="toggleRulesButton()">
+            <div class="w-5 h-5 border border-gray-500 rounded bg-transparent flex items-center justify-center flex-shrink-0"><svg class="hidden w-3 h-3 text-white pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg></div>
+            <span class="text-xs text-gray-400">I have read the rules of the "The Colosseum" section and agree with them.</span>
+        </label>
+        <button id="rules-btn" onclick="submitRules()" disabled class="w-full bg-[#e61b28] text-white py-3.5 rounded-full font-bold text-lg opacity-50 cursor-not-allowed transition">Continue</button>
     </div>
+</div>
 
-    <div id="page-publish" class="hidden fixed inset-0 z-[170] bg-black max-w-md mx-auto overflow-y-auto no-scrollbar pb-32">
-        <div class="px-4 pt-6">
-            <h2 class="text-center text-2xl font-bold mb-6">Publish your project</h2>
-            
-            <div class="flex flex-col items-center gap-2 mb-6">
-                 <div class="w-24 h-24 bg-[#e61b28] rounded-full flex items-center justify-center cursor-pointer shadow-[0_0_20px_rgba(230,27,40,0.3)] relative">
-                    <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                    <div class="absolute bottom-2 right-2 text-white drop-shadow-md"><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"></path></svg></div>
-                </div>
-                <span class="text-xs text-gray-400">Set up avatar</span>
-            </div>
-            <div class="flex flex-col items-center gap-2 mb-8">
-                 <div class="w-full h-32 bg-[#e61b28] rounded-3xl flex items-center justify-center cursor-pointer shadow-[0_0_20px_rgba(230,27,40,0.3)] relative">
-                     <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                     <div class="absolute bottom-2 right-1/2 translate-x-8 translate-y-2 text-white drop-shadow-md"><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"></path></svg></div>
-                </div>
-                <span class="text-xs text-gray-400">Set up banner (ratio 3:1)</span>
-            </div>
-
-            <div class="input-group"><input type="text" placeholder="Enter name" class="custom-input"></div>
-
-            <div class="input-group justify-between cursor-pointer" onclick="openNetworkModal('publish')">
-                <div class="flex items-center gap-2">
-                    <div id="pub-net-icon" class="w-5 h-5 flex items-center justify-center"><img src="images/eth.png" class="w-full h-full object-contain"></div>
-                    <span id="pub-net-name" class="bg-white text-black px-2 py-0.5 rounded font-bold text-sm">Ethereum</span>
-                </div>
-                <div class="flex items-center gap-2">
-                    <span id="pub-net-std" class="text-gray-400 text-sm">ERC20</span>
-                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                </div>
-            </div>
-
-            <div class="input-group"><input type="text" placeholder="0x742d...5e8f" class="custom-input text-xs font-mono"></div>
-            <div class="input-group"><svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg><input type="text" placeholder="Your Telegram channel link" class="custom-input text-right"></div>
-            <div class="input-group"><svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/></svg><input type="text" placeholder="Your website link" class="custom-input text-right"></div>
-            <div class="input-group"><svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg><input type="text" placeholder="https://x.com" class="custom-input text-right"></div>
-
-             <div class="relative mb-8">
-                <div class="bg-[#0a0a0a] border border-[#333] rounded-2xl p-4 pb-8">
-                    <textarea class="w-full bg-transparent text-white text-sm outline-none resize-none h-20" placeholder="My project description"></textarea>
-                </div>
-                <span class="absolute bottom-2 right-4 text-xs text-gray-500">0 / 120</span>
-                 <div class="absolute bottom-0 left-0 w-full h-[1px] bg-red-600 rounded-b-2xl"></div>
-            </div>
-
-            <button onclick="closePublish()" class="w-full bg-[#e61b28] text-white py-3.5 rounded-full font-bold text-lg mb-8 shadow-lg shadow-red-900/40">Continue</button>
-            
-             <div class="bg-black border-t border-gray-800 pb-6 pt-3 px-6 flex justify-between items-center fixed bottom-0 w-full max-w-md z-[180] left-0 right-0 mx-auto">
-                <div onclick="closePublish()" class="flex flex-col items-center text-gray-500 cursor-pointer"><svg class="h-6 w-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg><span class="text-[10px]">Home</span></div>
-                <div class="flex flex-col items-center text-red-600 cursor-pointer"><svg class="h-6 w-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z" /></svg><span class="text-[10px]">BoosT</span></div>
-                <div class="flex flex-col items-center text-gray-500 cursor-pointer"><svg class="h-6 w-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg><span class="text-[10px]">Colosseum</span></div>
-                <div class="flex flex-col items-center text-gray-500 cursor-pointer"><svg class="h-6 w-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg><span class="text-[10px]">Profile</span></div>
-            </div>
-        </div>
-    </div>
-
-    <div id="modal-networks" class="hidden fixed inset-0 z-[200] bg-black/80 backdrop-blur-sm flex items-end justify-center sm:items-center">
-        <div class="bg-[#151515] w-full max-w-sm rounded-t-3xl sm:rounded-3xl p-6 border-t sm:border border-[#333] relative max-h-[80vh] overflow-y-auto">
-            <h3 class="text-white font-bold text-lg text-center mb-4">Select Network</h3>
-            <div class="space-y-2">
-                <button onclick="selectNetwork('Ethereum', 'ERC20', '<img src=\'images/eth.png\' class=\'w-full h-full object-contain\'>')" class="w-full flex items-center p-3 rounded-xl hover:bg-[#222] transition gap-3"><div class="w-8 h-8"><img src="images/eth.png" class="w-full h-full object-contain"></div><div class="text-left flex-1"><div class="font-bold">Ethereum</div><div class="text-xs text-gray-500">ERC20</div></div></button>
-                <button onclick="selectNetwork('Solana', 'SPL', '<img src=\'images/Solana-logo.png\' class=\'w-full h-full object-contain\'>')" class="w-full flex items-center p-3 rounded-xl hover:bg-[#222] transition gap-3"><div class="w-8 h-8"><img src="images/Solana-logo.png" class="w-full h-full object-contain"></div><div class="text-left flex-1"><div class="font-bold">Solana</div><div class="text-xs text-gray-500">SPL</div></div></button>
-                <button onclick="selectNetwork('TON', 'Jetton', '<img src=\'images/ton-logo.webp\' class=\'w-full h-full object-contain\'>')" class="w-full flex items-center p-3 rounded-xl hover:bg-[#222] transition gap-3"><div class="w-8 h-8"><img src="images/ton-logo.webp" class="w-full h-full object-contain"></div><div class="text-left flex-1"><div class="font-bold">TON</div><div class="text-xs text-gray-500">Jetton</div></div></button>
-                <button onclick="selectNetwork('Bitcoin', 'BRC20', '<img src=\'images/btc.png\' class=\'w-full h-full object-contain\'>')" class="w-full flex items-center p-3 rounded-xl hover:bg-[#222] transition gap-3"><div class="w-8 h-8"><img src="images/btc.png" class="w-full h-full object-contain"></div><div class="text-left flex-1"><div class="font-bold">Bitcoin</div><div class="text-xs text-gray-500">BRC20</div></div></button>
-                <button onclick="selectNetwork('BNB Chain', 'BEP20', '<img src=\'images/bnb-logo.png\' class=\'w-full h-full object-contain\'>')" class="w-full flex items-center p-3 rounded-xl hover:bg-[#222] transition gap-3"><div class="w-8 h-8"><img src="images/bnb-logo.png" class="w-full h-full object-contain"></div><div class="text-left flex-1"><div class="font-bold">BNB Chain</div><div class="text-xs text-gray-500">BEP20</div></div></button>
-            </div>
-            <button onclick="closeNetworkModal()" class="mt-4 w-full text-center text-gray-500 text-sm p-2">Cancel</button>
-        </div>
-    </div>
-
-    <script>
-        let activeNetworkTrigger = null;
-
-        /* --- NETWORK SELECTOR --- */
-        function openNetworkModal(source) {
-            activeNetworkTrigger = source;
-            document.getElementById('modal-networks').classList.remove('hidden');
-        }
-        function closeNetworkModal() {
-            document.getElementById('modal-networks').classList.add('hidden');
-            activeNetworkTrigger = null;
-        }
-        function selectNetwork(name, standard, iconHtml) {
-            if (activeNetworkTrigger === 'publish') {
-                document.getElementById('pub-net-name').textContent = name;
-                document.getElementById('pub-net-std').textContent = standard;
-                document.getElementById('pub-net-icon').innerHTML = iconHtml;
-            } else if (activeNetworkTrigger === 'edit') {
-                document.getElementById('edit-net-name').textContent = name;
-                document.getElementById('edit-net-std').textContent = standard;
-                document.getElementById('edit-net-icon').innerHTML = iconHtml;
-            }
-            closeNetworkModal();
-        }
-
-        /* --- NAV --- */
-        function openProject() {
-            document.getElementById('page-boost').classList.remove('hidden');
-            document.body.style.overflow = 'hidden'; 
-        }
-        function closeProject() {
-            document.getElementById('page-boost').classList.add('hidden');
-            document.body.style.overflow = '';
-        }
+<div id="page-publish" class="hidden fixed inset-0 z-[998] bg-black max-w-md mx-auto overflow-y-auto no-scrollbar pb-36">
+    <div class="px-4 pt-6">
+        <h2 class="text-center text-2xl font-bold mb-6">Publish your project</h2>
         
-        /* NEW: Past Best Projects */
-        function openPastBest() {
-            document.getElementById('page-past-best').classList.remove('hidden');
-            document.body.style.overflow = 'hidden'; 
-        }
-        function closePastBest() {
-            document.getElementById('page-past-best').classList.add('hidden');
-            document.body.style.overflow = '';
-        }
+        <div class="flex flex-col items-center gap-2 mb-6">
+            <div class="w-24 h-24 bg-[#e61b28] rounded-full flex items-center justify-center cursor-pointer shadow-[0_0_20px_rgba(230,27,40,0.3)] relative text-white">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-8-2h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+                <div class="absolute bottom-0 right-0 text-white drop-shadow-md"><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"></path></svg></div>
+            </div>
+            <span class="text-xs text-gray-400">Set up avatar</span>
+        </div>
+        
+        <div class="flex flex-col items-center gap-2 mb-8">
+            <div class="w-full h-32 bg-[#e61b28] rounded-3xl flex items-center justify-center cursor-pointer shadow-[0_0_20px_rgba(230,27,40,0.3)] relative text-white">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-8-2h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+                <div class="absolute bottom-4 right-1/2 translate-x-1/2 text-white drop-shadow-md"><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"></path></svg></div>
+            </div>
+            <span class="text-xs text-gray-400">Set up banner (ratio 3:1)</span>
+        </div>
+        
+        <div class="input-group w-full">
+            <input type="text" placeholder="Enter name" class="custom-input w-full">
+        </div>
 
-        /* NEW: Results Sheet */
-        function openResults() {
-            document.getElementById('page-results').classList.remove('hidden');
-            document.body.style.overflow = 'hidden'; 
-        }
-        function closeResults() {
-            document.getElementById('page-results').classList.add('hidden');
-             document.body.style.overflow = '';
-        }
+        <div class="input-group justify-between cursor-pointer" onclick="openNetworkModal('publish')">
+            <div class="flex items-center gap-2">
+                <div id="pub-net-icon" class="w-5 h-5 flex items-center justify-center"><img src="images/eth.png" class="w-full h-full object-contain"></div>
+                <span id="pub-net-name" class="bg-white text-black px-2 py-0.5 rounded font-bold text-sm">Ethereum</span>
+            </div>
+            <div class="flex items-center gap-2">
+                <span id="pub-net-std" class="text-gray-400 text-sm">ERC20</span>
+                <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </div>
+        </div>
 
-        function openSettings() {
-            document.getElementById('page-edit').classList.remove('hidden');
-        }
-        function closeSettings() {
-            document.getElementById('page-edit').classList.add('hidden');
-        }
-        function openDeleteModal() {
-            document.getElementById('modal-delete').classList.remove('hidden');
-        }
-        function closeDeleteModal() {
-            document.getElementById('modal-delete').classList.add('hidden');
-        }
-        function openRules() {
-            document.getElementById('page-rules').classList.remove('hidden');
-        }
-        function toggleRulesButton() {
-            const checkbox = document.getElementById('rules-checkbox');
-            const btn = document.getElementById('rules-btn');
-            if (checkbox.checked) {
-                btn.classList.remove('opacity-50', 'cursor-not-allowed');
-                btn.disabled = false;
-            } else {
-                btn.classList.add('opacity-50', 'cursor-not-allowed');
-                btn.disabled = true;
+        <div class="input-group"><input type="text" placeholder="0x742d...5e8f" class="custom-input text-xs font-mono"></div>
+        <div class="input-group"><svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg><input type="text" placeholder="Your Telegram channel link" class="custom-input text-right"></div>
+        <div class="input-group"><svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/></svg><input type="text" placeholder="Your website link" class="custom-input text-right"></div>
+        <div class="input-group"><svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg><input type="text" placeholder="https://x.com" class="custom-input text-right"></div>
+
+         <div class="relative mb-8">
+            <div class="bg-[#0a0a0a] border border-[#333] rounded-2xl p-4 pb-8">
+                <textarea class="w-full bg-transparent text-white text-sm outline-none resize-none h-20" placeholder="My project description"></textarea>
+            </div>
+            <span class="absolute bottom-2 right-4 text-xs text-gray-500">0 / 120</span>
+             <div class="absolute bottom-0 left-0 w-full h-[1px] bg-red-600 rounded-b-2xl"></div>
+        </div>
+
+        <button onclick="closePublish()" class="w-full bg-[#e61b28] text-white py-3.5 rounded-full font-bold text-lg mb-8 shadow-lg shadow-red-900/40">Continue</button>
+    </div>
+        
+         <div class="bg-black border-t border-gray-800 pb-6 pt-4 px-6 flex justify-between items-center fixed bottom-0 w-full max-w-md z-[180] left-0 right-0 mx-auto">
+            <a href="index.html" onclick="closePublish()" class="flex flex-col items-center text-gray-500 cursor-pointer">
+                <img src="images/home.jpg" alt="Home" class="w-7 h-7 mb-1">
+                <span class="text-[10px]">Home</span>
+            </a>
+            <div class="flex flex-col items-center text-red-600 cursor-pointer">
+                <img src="images/boost.jpg" alt="Boost" class="w-7 h-7 mb-1">
+                <span class="text-[10px]">BoosT</span>
+            </div>
+            <a href="colosseum.html" class="flex flex-col items-center text-gray-500 cursor-pointer">
+                <img src="images/colosseum.jpg" alt="Colosseum" class="w-7 h-7 mb-1">
+                <span class="text-[10px]">Colosseum</span>
+            </a>
+            <div class="flex flex-col items-center text-gray-500 cursor-pointer">
+                <img src="images/profile.jpg" alt="Profile" class="w-7 h-7 mb-1">
+                <span class="text-[10px]">Profile</span>
+            </div>
+        </div>
+</div>
+
+<div id="modal-networks" class="hidden fixed inset-0 z-[200] bg-black/80 backdrop-blur-sm flex items-end justify-center sm:items-center">
+    <div class="bg-[#151515] w-full max-w-sm rounded-t-3xl sm:rounded-3xl p-6 border-t sm:border border-[#333] relative max-h-[80vh] overflow-y-auto">
+        <h3 class="text-white font-bold text-lg text-center mb-4">Select Network</h3>
+        <div class="space-y-2">
+            <button onclick="selectNetwork('Ethereum', 'ERC20', 'images/eth.png')" class="w-full flex items-center p-3 rounded-xl hover:bg-[#222] transition gap-3"><div class="w-8 h-8"><img src="images/eth.png" class="w-full h-full object-contain"></div><div class="text-left flex-1"><div class="font-bold">Ethereum</div><div class="text-xs text-gray-500">ERC20</div></div></button>
+            <button onclick="selectNetwork('Solana', 'SPL', 'images/Solana-logo.png')" class="w-full flex items-center p-3 rounded-xl hover:bg-[#222] transition gap-3"><div class="w-8 h-8"><img src="images/Solana-logo.png" class="w-full h-full object-contain"></div><div class="text-left flex-1"><div class="font-bold">Solana</div><div class="text-xs text-gray-500">SPL</div></div></button>
+            <button onclick="selectNetwork('TON', 'Jetton', 'images/ton-logo.webp')" class="w-full flex items-center p-3 rounded-xl hover:bg-[#222] transition gap-3"><div class="w-8 h-8"><img src="images/ton-logo.webp" class="w-full h-full object-contain"></div><div class="text-left flex-1"><div class="font-bold">TON</div><div class="text-xs text-gray-500">Jetton</div></div></button>
+            <button onclick="selectNetwork('Bitcoin', 'BRC20', 'images/btc.png')" class="w-full flex items-center p-3 rounded-xl hover:bg-[#222] transition gap-3"><div class="w-8 h-8"><img src="images/btc.png" class="w-full h-full object-contain"></div><div class="text-left flex-1"><div class="font-bold">Bitcoin</div><div class="text-xs text-gray-500">BRC20</div></div></button>
+            <button onclick="selectNetwork('BNB Chain', 'BEP20', 'images/bnb-logo.png')" class="w-full flex items-center p-3 rounded-xl hover:bg-[#222] transition gap-3"><div class="w-8 h-8"><img src="images/bnb-logo.png" class="w-full h-full object-contain"></div><div class="text-left flex-1"><div class="font-bold">BNB Chain</div><div class="text-xs text-gray-500">BEP20</div></div></button>
+        </div>
+        <button onclick="closeNetworkModal()" class="mt-4 w-full text-center text-gray-500 text-sm p-2">Cancel</button>
+    </div>
+</div>
+
+<script>
+let currentModalType = 'publish';
+
+function openPastBest() {
+    document.getElementById('page-past-best').classList.remove('hidden');
+}
+
+function closePastBest() {
+    document.getElementById('page-past-best').classList.add('hidden');
+}
+
+function openResults() {
+    document.getElementById('page-results').classList.remove('hidden');
+}
+
+function closeResults() {
+    document.getElementById('page-results').classList.add('hidden');
+}
+
+function openBoost() {
+    document.getElementById('page-boost').classList.remove('hidden');
+    setTimeout(initChart, 100);
+}
+
+function closeBoost() {
+    document.getElementById('page-boost').classList.add('hidden');
+}
+
+function openSettings() {
+    document.getElementById('page-edit').classList.remove('hidden');
+}
+
+function closeSettings() {
+    document.getElementById('page-edit').classList.add('hidden');
+}
+
+function openDeleteModal() {
+    document.getElementById('modal-delete').classList.remove('hidden');
+}
+
+function closeDeleteModal() {
+    document.getElementById('modal-delete').classList.add('hidden');
+}
+
+function openPublish() {
+    const rulesPage = document.getElementById('page-rules');
+    const publishPage = document.getElementById('page-publish');
+    
+    if (!localStorage.getItem('rulesAccepted')) {
+        rulesPage.style.display = 'flex';
+        publishPage.classList.add('hidden');
+    } else {
+        rulesPage.style.display = 'none';
+        publishPage.classList.remove('hidden');
+    }
+}
+
+function closePublish() {
+    document.getElementById('page-publish').classList.add('hidden');
+}
+
+function toggleRulesButton() {
+    const checkbox = document.getElementById('rules-checkbox');
+    const button = document.getElementById('rules-btn');
+    
+    if (checkbox.checked) {
+        button.disabled = false;
+        button.classList.remove('opacity-50', 'cursor-not-allowed');
+        button.classList.add('hover:bg-red-700');
+    } else {
+        button.disabled = true;
+        button.classList.add('opacity-50', 'cursor-not-allowed');
+        button.classList.remove('hover:bg-red-700');
+    }
+}
+
+function submitRules() {
+    localStorage.setItem('rulesAccepted', 'true');
+    document.getElementById('page-rules').style.display = 'none';
+    document.getElementById('page-publish').classList.remove('hidden');
+}
+
+function openNetworkModal(type) {
+    currentModalType = type;
+    document.getElementById('modal-networks').classList.remove('hidden');
+}
+
+function closeNetworkModal() {
+    document.getElementById('modal-networks').classList.add('hidden');
+}
+
+function selectNetwork(name, standard, iconPath) {
+    const prefix = currentModalType === 'edit' ? 'edit' : 'pub';
+    document.getElementById(`${prefix}-net-name`).textContent = name;
+    document.getElementById(`${prefix}-net-std`).textContent = standard;
+    document.getElementById(`${prefix}-net-icon`).innerHTML = `<img src="${iconPath}" class="w-full h-full object-contain">`;
+    closeNetworkModal();
+}
+
+function initChart() {
+    const chartElement = document.getElementById('chart-area');
+    if (!chartElement || chartElement.querySelector('.apexcharts-canvas')) return;
+
+    const options = {
+        series: [{
+            name: 'Price',
+            data: [
+                {x: new Date('2024-01-01').getTime(), y: [0.020, 0.024, 0.019, 0.023]},
+                {x: new Date('2024-01-02').getTime(), y: [0.023, 0.026, 0.022, 0.025]},
+                {x: new Date('2024-01-03').getTime(), y: [0.025, 0.027, 0.024, 0.026]},
+                {x: new Date('2024-01-04').getTime(), y: [0.026, 0.028, 0.025, 0.027]},
+                {x: new Date('2024-01-05').getTime(), y: [0.027, 0.029, 0.026, 0.028]},
+                {x: new Date('2024-01-06').getTime(), y: [0.028, 0.030, 0.027, 0.029]},
+                {x: new Date('2024-01-07').getTime(), y: [0.029, 0.031, 0.028, 0.030]}
+            ]
+        }],
+        chart: {
+            type: 'candlestick',
+            height: 250,
+            background: 'transparent',
+            toolbar: { show: false },
+            fontFamily: 'Inter, sans-serif'
+        },
+        plotOptions: {
+            candlestick: {
+                colors: {
+                    upward: '#22c55e',
+                    downward: '#ef4444'
+                }
             }
+        },
+        xaxis: {
+            type: 'datetime',
+            labels: {
+                style: { colors: '#9ca3af', fontSize: '10px' }
+            }
+        },
+        yaxis: {
+            tooltip: { enabled: true },
+            labels: {
+                style: { colors: '#9ca3af', fontSize: '10px' },
+                formatter: function(val) {
+                    return '$' + val.toFixed(3);
+                }
+            }
+        },
+        grid: {
+            borderColor: '#222',
+            strokeDashArray: 3
+        },
+        tooltip: {
+            theme: 'dark',
+            style: { fontSize: '12px' }
         }
-        function submitRules() {
-            document.getElementById('page-rules').classList.add('hidden');
-            document.getElementById('page-publish').classList.remove('hidden');
-        }
-        function closePublish() {
-            document.getElementById('page-publish').classList.add('hidden');
-            document.getElementById('rules-checkbox').checked = false;
-            toggleRulesButton();
-        }
-    </script>
+    };
+
+    const chart = new ApexCharts(chartElement, options);
+    chart.render();
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    const checkbox = document.querySelector('.custom-checkbox input[type="checkbox"]');
+    if (checkbox) {
+        checkbox.addEventListener('change', function() {
+            const svg = this.parentElement.querySelector('svg');
+            if (this.checked) {
+                svg.classList.remove('hidden');
+            } else {
+                svg.classList.add('hidden');
+            }
+        });
+    }
+});
+</script>
 </body>
 </html>
+
+
+

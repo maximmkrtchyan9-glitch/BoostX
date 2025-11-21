@@ -136,7 +136,7 @@
 </head>
 <body class="font-sans antialiased overflow-hidden bg-black text-white">
 
-   <div id="page-colosseum" class="max-w-[390px] mx-auto bg-black min-h-screen relative pb-24 overflow-y-auto h-screen no-scrollbar">
+   <div id="page-colosseum" class="max-w-[375px] mx-auto bg-black min-h-screen relative pb-24 overflow-y-auto h-screen no-scrollbar">
     
     <div class="flex items-center justify-between px-4 py-2 text-xs font-bold bg-black border-b border-gray-800 sticky top-0 z-40">
         <div class="flex items-center gap-2">
@@ -244,7 +244,7 @@
         </div>
     </div>
 
-    <div class="fixed bottom-0 left-0 right-0 mx-auto max-w-[390px] z-50 pointer-events-none">
+    <div class="fixed bottom-0 left-0 right-0 mx-auto max-w-[375px] z-50 pointer-events-none">
         <div class="px-4 mb-4"> 
             <button onclick="openPublish()" class="w-full bg-[#DC2626] text-white py-4 rounded-full font-bold text-xl shadow-lg flex items-center justify-center gap-2 pointer-events-auto hover:bg-red-700 transition shadow-red-900/50">
                 Publish project 
@@ -253,6 +253,7 @@
         </div>
 
         <div class="flex justify-around items-center py-3 bg-black border-t border-gray-800 pointer-events-auto">
+             <img src="images/light.png" alt="" class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none opacity-70">
             <a href="index.html" class="flex flex-col items-center gap-1 text-gray-500 hover:text-white transition-colors">
                 <img src="images/home.jpg" alt="Home" class="w-8 h-8">
                 <span class="text-xs">Home</span>
@@ -266,7 +267,7 @@
                 <span class="text-xs">BoosT</span>
             </a>
             
-            <a href="colosseum.html" class="flex flex-col items-center gap-1 px-4 py-2 -mx-4 -my-2 bg-red-600/10 rounded-xl transition-colors">
+            <a href="colosseum.html" class="flex flex-col items-center gap-1 px-4 py-2 -mx-4 -my-2">
                 <img src="images/coloseumR.png" alt="Colosseum" class="w-8 h-8">
                 <span class="text-xs font-semibold text-red-600">Colosseum</span>
             </a>
@@ -279,7 +280,7 @@
     </div>
 </div>
 
-<div id="page-past-best" class="hidden fixed inset-0 z-[60] bg-black max-w-[390px] mx-auto flex flex-col">
+<div id="page-past-best" class="hidden fixed inset-0 z-[60] bg-black max-w-[375px] mx-auto flex flex-col">
     <div class="flex items-center justify-between px-4 py-2 text-xs font-bold bg-black border-b border-gray-800 sticky top-0 z-50">
         <div class="flex items-center gap-2">
             <span>#1</span>
@@ -501,7 +502,8 @@
         </div>
     </div>
     
-    <div class="flex justify-around items-center py-3 bg-black border-t border-gray-800 fixed bottom-0 w-full max-w-[390px] z-50">
+    <div class="flex justify-around items-center py-3 bg-black border-t border-gray-800 fixed bottom-0 w-full max-w-[375px] z-50">
+         <img src="images/light.png" alt="" class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none opacity-70">
         <a href="index.html" class="flex flex-col items-center gap-1 text-gray-500 hover:text-white transition-colors">
             <img src="images/home.jpg" alt="Home" class="w-8 h-8">
             <span class="text-xs">Home</span>
@@ -515,7 +517,7 @@
             <span class="text-xs">BoosT</span>
         </a>
         
-        <a href="colosseum.html" class="flex flex-col items-center gap-1 px-4 py-2 -mx-4 -my-2 bg-red-600/10 rounded-xl transition-colors">
+        <a href="colosseum.html" class="flex flex-col items-center gap-1 px-4 py-2 -mx-4 -my-2 ">
             <img src="images/coloseumR.png" alt="Colosseum" class="w-8 h-8">
             <span class="text-xs font-semibold text-red-600">Colosseum</span>
         </a>
@@ -527,7 +529,7 @@
     </div>
 </div>
 
-<div id="page-results" class="hidden fixed inset-0 z-[70] bg-black max-w-[390px] md:max-w-full mx-auto flex flex-col transition-all duration-300">
+<div id="page-results" class="hidden fixed inset-0 z-[70] bg-black max-w-[375px] md:max-w-full mx-auto flex flex-col transition-all duration-300">
     <div class="flex items-center justify-between px-4 py-2 text-xs font-bold bg-black border-b border-gray-800 sticky top-0 z-40">
         <div class="flex items-center gap-2">
             <span>#1</span>
@@ -568,7 +570,7 @@
         </div>
     </div>
 
-    <div class="px-4 mt-4 mb-4 max-w-[390px] md:max-w-full mx-auto">
+    <div class="px-4 mt-4 mb-4 max-w-[375px] md:max-w-full mx-auto">
         <div class="bg-[#111] border border-[#333] rounded-full px-4 py-3 flex items-center gap-2">
             <input type="text" placeholder="Find your project" class="bg-transparent w-full outline-none text-sm text-white placeholder-gray-500">
             <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -743,14 +745,15 @@
         </div>
     </div>
     
-    <div class="fixed bottom-0 left-0 right-0 mx-auto max-w-[390px] md:max-w-full z-50 pointer-events-none">
+    <div class="fixed bottom-0 left-0 right-0 mx-auto max-w-[375px] md:max-w-full z-50 pointer-events-none">
         <div class="px-4 mb-4 relative text-center md:max-w-md md:mx-auto"> 
             <button onclick="openPublish()" class="w-full bg-[#DC2626] text-white py-4 rounded-full font-bold text-xl shadow-lg flex items-center justify-center gap-2 pointer-events-auto hover:bg-red-700 transition shadow-red-900/50">
                 Publish project 
                 <span class="text-2xl font-thin">+</span>
             </button>
         </div>
-        <div class="bg-black border-t border-gray-800 pb-6 pt-4 px-6 flex justify-between items-center pointer-events-auto max-w-[390px] mx-auto">
+        <div class="bg-black border-t border-gray-800 pb-6 pt-4 px-6 flex justify-between items-center pointer-events-auto max-w-[375px] mx-auto">
+             <img src="images/light.png" alt="" class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none opacity-70">
             <a href="index.html" onclick="closeResults()" class="flex flex-col items-center text-gray-500 cursor-pointer hover:text-white transition">
                 <img src="images/home.jpg" alt="Home" class="w-8 h-8 mb-1">
                 <span class="text-[10px]">Home</span>
@@ -762,7 +765,7 @@
             </div>
             <span class="text-[10px]">BoosT</span>
         </a>
-        <a href="colosseum.html" class="flex flex-col items-center px-3 py-2 -mx-3 -my-2 bg-red-600/10 rounded-xl">
+        <a href="colosseum.html" class="flex flex-col items-center px-3 py-2 -mx-3 -my-2">
             <img src="images/coloseumR.png" alt="Colosseum" class="w-8 h-8 mb-1">
             <span class="text-[11px] font-semibold text-red-600">Colosseum</span>
         </a>
@@ -774,7 +777,7 @@
     </div>
 </div>
 
-<div id="page-boost" class="hidden fixed inset-0 z-[100] bg-black max-w-[390px] mx-auto overflow-y-auto no-scrollbar pb-24">
+<div id="page-boost" class="hidden fixed inset-0 z-[100] bg-black max-w-[375px] mx-auto overflow-y-auto no-scrollbar pb-24">
     
     <div class="w-full h-40 overflow-hidden relative">
         <img src="https://api.dicebear.com/9.x/bottts-neutral/svg?seed=fire" class="w-full h-[300%] object-cover -mt-12 object-top blur-sm opacity-50 absolute">
@@ -908,15 +911,16 @@
         </button>
     </div>
 
-    <div class="bg-black border-t border-gray-800 pb-6 pt-4 px-6 flex justify-between items-center fixed bottom-0 w-full max-w-[390px] z-[110]">
+    <div class="bg-black border-t border-gray-800 pb-6 pt-4 px-6 flex justify-between items-center fixed bottom-0 w-full max-w-[375px] z-[110]">
+         <img src="images/light.png" alt="" class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none opacity-70">
         <a href="index.html" onclick="closeBoost()" class="flex flex-col items-center text-gray-500 cursor-pointer hover:text-white transition">
             <img src="images/home.jpg" alt="Home" class="w-8 h-8 mb-1">
             <span class="text-[10px]">Home</span>
         </a>
-        <a href="index.html" onclick="closeBoost()" class="flex flex-col items-center px-3 py-2 -mx-3 -my-2 bg-red-600/10 rounded-xl" >
+        <a href="index.html" onclick="closeBoost()" class="flex flex-col items-center px-3 py-2 -mx-3 -my-2" >
             <div class="relative">
                 <img src="images/boost.jpg" alt="Boost" class="w-8 h-8 mb-1">
-                <div class="absolute -top-1 -right-1 w-2 h-2 bg-red-600 rounded-full"></div>
+                <div class="absolute -top-1 -right-1 w-2 h-2"></div>
             </div>
             <span  class="text-[10px] font-semibold text-red-600">BoosT</span>
         </a>
@@ -931,7 +935,7 @@
     </div>
 </div>
 
-<div id="page-edit" class="hidden fixed inset-0 z-[120] bg-black max-w-[390px] mx-auto overflow-y-auto no-scrollbar pb-36">
+<div id="page-edit" class="hidden fixed inset-0 z-[120] bg-black max-w-[375px] mx-auto overflow-y-auto no-scrollbar pb-36">
     <div class="px-4 pt-6">
         <h2 class="text-center text-2xl font-bold mb-6">Edit your project</h2>
         
@@ -1010,15 +1014,16 @@
         </div>
     </div>
 
-    <div class="bg-black border-t border-gray-800 pb-6 pt-4 px-6 flex justify-between items-center fixed bottom-0 w-full max-w-[390px] z-[130]">
+    <div class="bg-black border-t border-gray-800 pb-6 pt-4 px-6 flex justify-between items-center fixed bottom-0 w-full max-w-[375px] z-[130]">
+         <img src="images/light.png" alt="" class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none opacity-70">
         <a href="index.html" onclick="closeSettings(); closeBoost()" class="flex flex-col items-center text-gray-500 cursor-pointer hover:text-white transition">
             <img src="images/home.jpg" alt="Home" class="w-8 h-8 mb-1">
             <span class="text-[10px]">Home</span>
         </a>
-        <a href="index.html" onclick="closeSettings(); closeBoost()" class="flex flex-col items-center px-3 py-2 -mx-3 -my-2 bg-red-600/10 rounded-xl">
+        <a href="index.html" onclick="closeSettings(); closeBoost()" class="flex flex-col items-center px-3 py-2 -mx-3 -my-2">
             <div class="relative">
                 <img src="images/boost.jpg" alt="Boost" class="w-8 h-8 mb-1">
-                <div class="absolute -top-1 -right-1 w-2 h-2 bg-red-600 rounded-full"></div>
+                <div class="absolute -top-1 -right-1 w-2 h-2"></div>
             </div>
             <span class="text-[10px] font-semibold text-red-600">BoosT</span>
         </a>
@@ -1050,7 +1055,7 @@
     </div>
 </div>
 
-<div id="page-rules" class="fixed inset-0 z-[999] bg-black max-w-[390px] mx-auto flex flex-col" style="display: none;">
+<div id="page-rules" class="fixed inset-0 z-[999] bg-black max-w-[375px] mx-auto flex flex-col" style="display: none;">
     <div class="p-4 text-center border-b border-gray-800 bg-black sticky top-0">
         <h2 class="text-xl font-bold text-white">The Colosseum Rules</h2>
     </div>
@@ -1133,7 +1138,7 @@
         </div>
     </div>
     
-    <div class="p-4 bg-black border-t border-gray-800 fixed bottom-0 w-full max-w-[390px]">
+    <div class="p-4 bg-black border-t border-gray-800 fixed bottom-0 w-full max-w-[375px]">
         <label class="flex items-start gap-3 mb-4 cursor-pointer custom-checkbox">
             <input type="checkbox" id="rules-checkbox" class="hidden" onchange="toggleRulesButton()">
             <div class="w-5 h-5 border border-gray-500 rounded bg-transparent flex items-center justify-center flex-shrink-0">
@@ -1149,7 +1154,7 @@
     </div>
 </div>
 
-<div id="page-publish" class="hidden fixed inset-0 z-[1000] bg-black max-w-[390px] mx-auto overflow-y-auto no-scrollbar pb-36">
+<div id="page-publish" class="hidden fixed inset-0 z-[1000] bg-black max-w-[375px] mx-auto overflow-y-auto no-scrollbar pb-36">
     <div class="px-4 pt-6">
         <h2 class="text-center text-2xl font-bold mb-6">Publish your project</h2>
         
@@ -1224,15 +1229,16 @@
         </button>
     </div>
     
-    <div class="bg-black border-t border-gray-800 pb-6 pt-4 px-6 flex justify-between items-center fixed bottom-0 w-full max-w-[390px] z-[180] left-0 right-0 mx-auto">
+    <div class="bg-black border-t border-gray-800 pb-6 pt-4 px-6 flex justify-between items-center fixed bottom-0 w-full max-w-[375px] z-[180] left-0 right-0 mx-auto">
+         <img src="images/light.png" alt="" class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none opacity-70">
         <a href="index.html" onclick="closePublish()" class="flex flex-col items-center text-gray-500 cursor-pointer hover:text-white transition">
             <img src="images/home.jpg" alt="Home" class="w-8 h-8 mb-1">
             <span class="text-[10px]">Home</span>
         </a>
-        <a href="index.html" onclick="closePublish()"  class="flex flex-col items-center px-3 py-2 -mx-3 -my-2 bg-red-600/10 rounded-xl">
+        <a href="index.html" onclick="closePublish()"  class="flex flex-col items-center px-3 py-2 -mx-3 -my-2 ">
             <div class="relative">
                 <img src="images/boost.jpg" alt="Boost" class="w-8 h-8 mb-1">
-                <div class="absolute -top-1 -right-1 w-2 h-2 bg-red-600 rounded-full"></div>
+                <div class="absolute -top-1 -right-1 w-2 h-2"></div>
             </div>
             <span class="text-[10px] font-semibold text-red-600">BoosT</span>
         </a>

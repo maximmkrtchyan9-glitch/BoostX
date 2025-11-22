@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Crypto Boost Profile</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Custom Scrollbar for cleaner look */
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #000;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #333;
+            border-radius: 2px;
+        }
+        
+        /* Hide scrollbar for horizontal scrolling if needed */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        body {
+            background-color: #111; /* Dark background for desktop area */
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* Mobile Container Centered */
+        #app-container {
+            background-color: #000;
+            min-height: 100vh;
+            width: 100%;
+            max-width: 430px; /* Typical mobile width */
+            margin: 0 auto;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+        }
+
+        /* Tab Animation */
+        .tab-indicator {
+            transition: all 0.3s ease;
+        }
+        
+        /* Smooth transitions for modals */
+        .modal {
+            transition: transform 0.3s ease-in-out;
+            transform: translateX(100%);
+        }
+        .modal.active {
+            transform: translateX(0);
+        }
+
+        /* Gradient text for special inputs */
+        .input-dark {
+            background-color: #0a0a0a;
+            border: 1px solid #222;
+        }
+        .input-dark:focus {
+            border-color: #dc2626;
+            outline: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="app-container">
+        
+        <!-- MAIN CONTENT AREA (Scrollable) -->
+        <div class="flex-1 overflow-y-auto pb-24 relative no-scrollbar" id="main-scroll">
+            
+            <!-- Header Section with Red Glow Background -->
+            <div class="relative bg-gradient-to-b from-red-900/40 via-black to-black pt-4 px-4 pb-6">
+                
+                <!-- Top Bar -->
+                <div class="flex justify-end mb-4">
+                    <button onclick="openSettings()" class="text-gray-400 hover:text-white transition">
+                        <!-- Hexagon Icon -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Profile Info -->
+                <div class="flex flex-col items-center">
+                    <div class="relative mb-3">
+                        <!-- Avatar Placeholder (Fire Character) -->
+                        <div class="w-24 h-24 rounded-full border-2 border-white/10 overflow-hidden bg-gray-800 flex items-center justify-center relative">
+                            <!-- Using an icon as placeholder if image fails, but styling it to look like the character -->
+                            <i class="fa-solid fa-fire text-orange-500 text-5xl"></i>
+                            <img src="https://api.dicebear.com/9.x/adventurer/svg?seed=Alex" class="absolute inset-0 w-full h-full object-cover" alt="Avatar">
+                        </div>
+                        <!-- Online Status -->
+                        <div class="absolute bottom-1 right-1 w-5 h-5 bg-green-500 rounded-full border-2 border-black"></div>
+                    </div>
+
+                    <div class="flex items-center gap-2 mb-1">
+                        <h1 class="text-2xl font-bold text-white">Alex Kuznetsov</h1>
+                        <i class="fa-solid fa-certificate text-red-600"></i>
+                    </div>
+
+                    <div class="mb-3">
+                        <span class="bg-red-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">Team Lead</span>
+                    </div>
+                    
+                    <p class="text-gray-400 text-xs mb-6">CryptoBoost Solutions</p>
+
+                    <!-- Social Icons Row -->
+                    <div class="flex gap-4 mb-2">
+                        <button class="w-12 h-12 rounded-xl bg-white/5 hover:bg-white/10 flex items-center justify-center text-white transition border border-white/5">
+                            <i class="fa-brands fa-telegram text-xl"></i>
+                        </button>
+                        <button class="w-12 h-12 rounded-xl bg-white/5 hover:bg-white/10 flex items-center justify-center text-white transition border border-white/5">
+                            <i class="fa-solid fa-envelope text-xl"></i>
+                        </button>
+                        <button class="w-12 h-12 rounded-xl bg-white/5 hover:bg-white/10 flex items-center justify-center text-white transition border border-white/5">
+                            <i class="fa-brands fa-x-twitter text-xl"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TABS Navigation -->
+            <div class="flex w-full border-b border-gray-800 px-4 sticky top-0 bg-black/95 backdrop-blur-sm z-20">
+                <button onclick="switchTab('wall')" id="tab-wall" class="flex-1 py-3 text-center text-sm font-medium text-white border-b-2 border-red-600 flex items-center justify-center gap-2 transition-colors">
+                    Wall <i class="fa-regular fa-newspaper text-xs"></i>
+                </button>
+                <button onclick="switchTab('projects')" id="tab-projects" class="flex-1 py-3 text-center text-sm font-medium text-gray-500 border-b-2 border-transparent flex items-center justify-center gap-2 hover:text-gray-300 transition-colors">
+                    Projects <i class="fa-solid fa-rocket text-xs"></i>
+                </button>
+                <button onclick="switchTab('activity')" id="tab-activity" class="flex-1 py-3 text-center text-sm font-medium text-gray-500 border-b-2 border-transparent flex items-center justify-center gap-2 hover:text-gray-300 transition-colors">
+                    Activity <i class="fa-solid fa-fire text-xs"></i>
+                </button>
+            </div>
+
+            <!-- CONTENT SECTIONS -->
+            <div class="p-4">
+                
+                <!-- Search Bar (Visible on some tabs, keeping consistent) -->
+                <div class="relative mb-6">
+                    <input type="text" placeholder="Search..." class="w-full bg-[#0a0a0a] text-gray-300 text-sm py-3 px-4 pl-4 rounded-full border border-gray-800 focus:border-red-600 focus:outline-none transition-colors">
+                    <i class="fa-solid fa-magnifying-glass absolute right-4 top-3.5 text-gray-500"></i>
+                </div>
+
+                <!-- WALL TAB CONTENT -->
+                <div id="content-wall" class="space-y-4 animate-fade-in">
+                    
+                    <!-- Post Card -->
+                    <div class="bg-[#0f0f0f] rounded-2xl p-4 border border-gray-800">
+                        <!-- Author Header -->
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="w-8 h-8 rounded-full overflow-hidden">
+                                <img src="https://api.dicebear.com/9.x/adventurer/svg?seed=Alex" class="w-full h-full object-cover">
+                            </div>
+                            <span class="text-white text-sm font-medium">Alex Kuznetsov</span>
+                        </div>
+
+                        <!-- Chart Placeholder (CSS Only Mockup) -->
+                        <div class="w-full h-40 bg-[#080808] rounded-lg mb-4 relative overflow-hidden border border-gray-800/50">
+                            <!-- Grid lines -->
+                            <div class="absolute inset-0" style="background-image: linear-gradient(#222 1px, transparent 1px), linear-gradient(90deg, #222 1px, transparent 1px); background-size: 20px 20px; opacity: 0.3;"></div>
+                            <!-- Candles (Mock) -->
+                            <div class="absolute bottom-10 left-10 w-2 h-12 bg-green-600 opacity-70"></div>
+                            <div class="absolute bottom-12 left-14 w-2 h-8 bg-red-600 opacity-70"></div>
+                            <div class="absolute bottom-8 left-18 w-2 h-16 bg-green-600 opacity-70"></div>
+                            <div class="absolute bottom-20 left-22 w-2 h-4 bg-green-600 opacity-70"></div>
+                            <div class="absolute bottom-10 left-26 w-2 h-14 bg-red-600 opacity-70"></div>
+                            <!-- Text overlay -->
+                            <div class="absolute top-2 right-2 text-[10px] text-gray-600">BTC/USDT</div>
+                        </div>
+
+                        <!-- Post Text -->
+                        <div class="text-gray-300 text-xs leading-relaxed space-y-2 mb-3">
+                            <p class="font-semibold text-white">I see a great setup for working out!</p>
+                            <p>The graph shows an interesting formation. The levels look promising, and there is growth potential. Sign up for this contract, but don't forget about risk management.</p>
+                            <p class="font-mono text-[10px] bg-gray-800 p-1.5 rounded text-gray-400 break-all select-all">CA: TXm9K3PqJ8vN2hL6wRpYt4sD9fGcE1bVnH</p>
+                            <p class="text-gray-500">Always DYOR! 🧐 #crypto #trading #DeFi</p>
+                        </div>
+
+                        <!-- Interactions -->
+                        <div class="flex items-center gap-2">
+                            <button class="flex items-center gap-1.5 bg-red-600/10 text-red-500 px-3 py-1.5 rounded-lg hover:bg-red-600/20 transition">
+                                <i class="fa-solid fa-heart text-xs"></i>
+                                <span class="text-xs font-bold">444</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Another Post (Short) -->
+                    <div class="bg-[#0f0f0f] rounded-2xl p-4 border border-gray-800">
+                         <div class="flex items-center gap-3 mb-3">
+                            <div class="w-8 h-8 rounded-full overflow-hidden">
+                                <img src="https://api.dicebear.com/9.x/adventurer/svg?seed=Alex" class="w-full h-full object-cover">
+                            </div>
+                            <span class="text-white text-sm font-medium">Alex Kuznetsov</span>
+                        </div>
+                        <p class="text-gray-300 text-xs mb-3">🚀 A promising setup is on the horizon! Keep your eyes peeled.</p>
+                        <div class="flex items-center gap-2">
+                            <button class="flex items-center gap-1.5 bg-gray-800 text-gray-400 px-3 py-1.5 rounded-lg">
+                                <i class="fa-regular fa-heart text-xs"></i>
+                                <span class="text-xs font-bold">0</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PROJECTS TAB CONTENT (Hidden by default) -->
+                <div id="content-projects" class="hidden space-y-4">
+                    
+                    <!-- Banner -->
+                    <div class="w-full h-24 rounded-xl bg-gradient-to-r from-red-900 to-red-600 flex flex-col items-center justify-center relative overflow-hidden mb-6">
+                        <div class="absolute inset-0 bg-black/20"></div>
+                        <h2 class="text-3xl font-bold text-white relative z-10">127</h2>
+                        <p class="text-xs text-white/80 relative z-10 uppercase tracking-wide">Projects Launched</p>
+                    </div>
+
+                    <!-- Project Card 1 -->
+                    <div class="bg-[#0f0f0f] rounded-2xl p-4 border border-gray-800 relative overflow-hidden group">
+                        <div class="flex justify-between items-start mb-3">
+                            <div class="flex items-center gap-3">
+                                <div class="w-12 h-12 rounded-full bg-orange-500 overflow-hidden border-2 border-gray-800">
+                                     <img src="https://api.dicebear.com/9.x/adventurer/svg?seed=Fire" class="w-full h-full object-cover">
+                                </div>
+                                <div>
+                                    <div class="flex items-center gap-2">
+                                        <span class="bg-white/10 text-white text-[10px] px-1.5 py-0.5 rounded">Solana</span>
+                                    </div>
+                                    <h3 class="text-white font-bold text-sm mt-1">SoulVerse RPG</h3>
+                                    <p class="text-gray-500 text-[10px] truncate w-32">CA: 0x34...a86</p>
+                                </div>
+                            </div>
+                            <button class="text-gray-500 hover:text-white"><i class="fa-solid fa-share-nodes"></i></button>
+                        </div>
+                        
+                        <div class="flex gap-2 mt-4">
+                            <button class="bg-red-900/30 text-red-500 text-xs px-4 py-2 rounded-lg flex-1 font-medium border border-red-900/50">Voted <i class="fa-solid fa-xmark ml-1"></i></button>
+                            <button class="bg-[#1a1a1a] text-gray-400 text-xs px-4 py-2 rounded-lg font-medium">More info</button>
+                        </div>
+
+                        <div class="grid grid-cols-3 gap-2 mt-3 border-t border-gray-800 pt-3">
+                            <div class="text-center">
+                                <div class="text-[9px] text-gray-500">Transactions</div>
+                                <div class="text-green-500 text-xs font-bold">+1.6M</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-[9px] text-gray-500">Volume</div>
+                                <div class="text-green-500 text-xs font-bold">+1.6M</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-[9px] text-gray-500">Holders</div>
+                                <div class="text-green-500 text-xs font-bold">+1.6M</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Project Card 2 -->
+                    <div class="bg-[#0f0f0f] rounded-2xl p-4 border border-gray-800 relative overflow-hidden">
+                         <div class="flex justify-between items-start mb-3">
+                            <div class="flex items-center gap-3">
+                                <div class="w-12 h-12 rounded-full bg-orange-500 overflow-hidden border-2 border-gray-800">
+                                     <img src="https://api.dicebear.com/9.x/adventurer/svg?seed=Soul" class="w-full h-full object-cover">
+                                </div>
+                                <div>
+                                    <div class="flex items-center gap-2">
+                                        <span class="bg-white/10 text-white text-[10px] px-1.5 py-0.5 rounded">Solana</span>
+                                    </div>
+                                    <h3 class="text-white font-bold text-sm mt-1">SoulVerse RPG</h3>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Simplified for repetition -->
+                         <div class="grid grid-cols-3 gap-2 mt-3 border-t border-gray-800 pt-3">
+                            <div class="text-center"><div class="text-green-500 text-xs font-bold">+1.6M</div></div>
+                            <div class="text-center"><div class="text-green-500 text-xs font-bold">+1.6M</div></div>
+                            <div class="text-center"><div class="text-green-500 text-xs font-bold">+1.6M</div></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ACTIVITY TAB CONTENT (Hidden by default) -->
+                <div id="content-activity" class="hidden space-y-3">
+                    
+                    <!-- Activity Item 1 -->
+                    <div class="bg-[#0f0f0f] p-4 rounded-2xl border border-gray-800">
+                         <div class="flex items-center gap-2 mb-3">
+                             <div class="w-6 h-6 rounded-full overflow-hidden">
+                                <img src="https://api.dicebear.com/9.x/adventurer/svg?seed=Alex" class="w-full h-full object-cover">
+                            </div>
+                            <span class="text-gray-300 text-xs">Alex Kuznetsov</span>
+                         </div>
+                         <div class="bg-[#151515] p-3 rounded-xl flex items-center justify-between">
+                             <div class="flex items-center gap-3">
+                                 <div class="w-10 h-10 bg-red-600 rounded-xl flex items-center justify-center text-white">
+                                     <i class="fa-regular fa-heart"></i>
+                                 </div>
+                                 <div>
+                                     <p class="text-[10px] text-gray-500">30 minutes ago</p>
+                                     <p class="text-white text-sm font-semibold">Voted for CryptoMoon</p>
+                                 </div>
+                             </div>
+                             <span class="text-green-500 text-xs font-bold">+120XP</span>
+                         </div>
+                    </div>
+
+                    <!-- Activity Item 2 -->
+                    <div class="bg-[#0f0f0f] p-4 rounded-2xl border border-gray-800">
+                         <div class="flex items-center gap-2 mb-3">
+                             <div class="w-6 h-6 rounded-full overflow-hidden">
+                                <img src="https://api.dicebear.com/9.x/adventurer/svg?seed=Alex" class="w-full h-full object-cover">
+                            </div>
+                            <span class="text-gray-300 text-xs">Alex Kuznetsov</span>
+                         </div>
+                         <div class="bg-[#151515] p-3 rounded-xl flex items-center justify-between">
+                             <div class="flex items-center gap-3">
+                                 <div class="w-10 h-10 bg-red-600/20 text-red-500 rounded-xl flex items-center justify-center">
+                                     <i class="fa-solid fa-rocket"></i>
+                                 </div>
+                                 <div>
+                                     <p class="text-[10px] text-gray-500">30 minutes ago</p>
+                                     <p class="text-white text-sm font-semibold">Token Created</p>
+                                 </div>
+                             </div>
+                             <span class="text-green-500 text-xs font-bold">+120XP</span>
+                         </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- BOTTOM NAVIGATION -->
+        <nav class="absolute bottom-0 left-0 w-full bg-[#0f0f0f] border-t border-gray-800 pb-4 pt-3 px-6 z-10">
+            <div class="flex justify-between items-end">
+                
+                <a href="index.html" class="flex flex-col items-center gap-1 text-gray-500 hover:text-white transition-colors relative z-10">
+                    <i class="fa-solid fa-house text-xl"></i>
+                    <span class="text-xs">Home</span>
+                </a>
+                
+                <a href="colosseum.html" class="flex flex-col items-center gap-1 text-gray-500 hover:text-white transition-colors relative z-10">
+                    <div class="relative">
+                        <i class="fa-solid fa-fire text-xl"></i>
+                        <div class="absolute -top-1 -right-1 w-2 h-2 bg-red-600 rounded-full"></div>
+                    </div>
+                    <span class="text-xs">BoosT</span>
+                </a>
+                
+                <a href="colosseum.html" class="flex flex-col items-center gap-1 text-gray-500 hover:text-white transition-colors relative z-10">
+                    <i class="fa-solid fa-landmark text-xl"></i>
+                    <span class="text-xs">Colosseum</span>
+                </a>
+                
+                <button class="flex flex-col items-center gap-1 px-4 py-2 -mx-4 -my-2 relative z-10 text-red-600">
+                    <i class="fa-regular fa-user text-xl"></i>
+                    <span class="text-xs font-semibold">Profile</span>
+                </button>
+            </div>
+        </nav>
+
+        <!-- SETTINGS MODAL (Overlay 1) -->
+        <div id="settings-modal" class="modal fixed inset-0 bg-black z-30 flex flex-col overflow-hidden">
+            <!-- Header -->
+            <div class="px-4 pt-6 pb-4 flex justify-between items-center">
+                <h2 class="text-2xl font-bold text-white">Settings</h2>
+                <button onclick="closeSettings()" class="text-gray-400 hover:text-white text-sm">Done</button>
+            </div>
+
+            <!-- Search -->
+            <div class="px-4 mb-6">
+                <div class="relative">
+                    <input type="text" placeholder="Search settings" class="w-full bg-[#0a0a0a] text-white py-3 px-4 pl-4 rounded-full border border-gray-800 focus:border-white/20 focus:outline-none">
+                    <i class="fa-solid fa-magnifying-glass absolute right-4 top-3.5 text-white"></i>
+                </div>
+            </div>
+
+            <!-- Menu Items -->
+            <div class="flex-1 overflow-y-auto px-4 space-y-1">
+                <!-- Profile Settings Item -->
+                <button onclick="openProfileEdit()" class="w-full flex items-center justify-between py-4 hover:bg-white/5 rounded-lg px-2 transition">
+                    <div class="flex items-center gap-4 text-white">
+                        <i class="fa-regular fa-user w-6 text-center"></i>
+                        <span>Profile settings</span>
+                    </div>
+                </button>
+
+                <button class="w-full flex items-center justify-between py-4 hover:bg-white/5 rounded-lg px-2 transition">
+                    <div class="flex items-center gap-4 text-white">
+                        <i class="fa-solid fa-rocket w-6 text-center"></i>
+                        <span>Launched projects</span>
+                    </div>
+                </button>
+
+                <button class="w-full flex items-center justify-between py-4 hover:bg-white/5 rounded-lg px-2 transition">
+                    <div class="flex items-center gap-4 text-white">
+                        <i class="fa-solid fa-shield-halved w-6 text-center"></i>
+                        <span>Privacy & Security</span>
+                    </div>
+                </button>
+
+                <button class="w-full flex items-center justify-between py-4 hover:bg-white/5 rounded-lg px-2 transition">
+                    <div class="flex items-center gap-4 text-white">
+                        <i class="fa-solid fa-dollar-sign w-6 text-center"></i>
+                        <span>Finance & Referrals</span>
+                    </div>
+                </button>
+
+                <button class="w-full flex items-center justify-between py-4 hover:bg-white/5 rounded-lg px-2 transition">
+                    <div class="flex items-center gap-4 text-white">
+                        <i class="fa-regular fa-circle-question w-6 text-center"></i>
+                        <span>FAQ & Support</span>
+                    </div>
+                </button>
+            </div>
+
+            <!-- Admin Panel Button -->
+            <div class="p-4 pb-8">
+                <button class="w-full bg-red-600 text-white py-4 rounded-2xl flex items-center justify-between px-6 hover:bg-red-700 transition">
+                    <div class="flex items-center gap-2">
+                        <i class="fa-solid fa-user-gear"></i>
+                    </div>
+                    <span class="font-medium">Admin Panel</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- EDIT PROFILE MODAL (Overlay 2) -->
+        <div id="profile-edit-modal" class="modal fixed inset-0 bg-black z-40 flex flex-col overflow-hidden">
+            <!-- Header -->
+            <div class="px-4 pt-6 pb-4 flex justify-between items-center">
+                <div class="flex items-center gap-2">
+                    <button onclick="closeProfileEdit()" class="text-white text-xl"><i class="fa-solid fa-chevron-left"></i></button>
+                    <h2 class="text-xl font-bold text-white ml-2">Profile settings</h2>
+                </div>
+                <button onclick="saveProfile()" class="text-white hover:text-red-500 transition">
+                    <i class="fa-solid fa-check text-xl"></i>
+                </button>
+            </div>
+
+            <!-- Form Content -->
+            <div class="flex-1 overflow-y-auto px-4 pb-8">
+                
+                <!-- Image Upload -->
+                <div class="flex justify-center mb-8 mt-4">
+                    <div class="relative">
+                        <div class="w-28 h-28 rounded-full overflow-hidden border-4 border-[#1a1a1a]">
+                             <img src="https://api.dicebear.com/9.x/adventurer/svg?seed=Alex" class="w-full h-full object-cover opacity-60">
+                        </div>
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <div class="w-10 h-8 bg-white/20 backdrop-blur rounded-lg flex items-center justify-center">
+                                <i class="fa-solid fa-image text-white text-sm"></i>
+                                <i class="fa-solid fa-plus text-white text-[8px] ml-0.5 -mt-2"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Inputs -->
+                <div class="space-y-5">
+                    <div>
+                        <label class="block text-gray-400 text-sm mb-2 ml-1">Your name</label>
+                        <input type="text" value="Alex Kuznetsov" class="w-full input-dark text-white py-3 px-4 rounded-2xl placeholder-gray-600">
+                    </div>
+
+                    <div>
+                        <input type="text" placeholder="Second name" class="w-full input-dark text-white py-3 px-4 rounded-2xl placeholder-gray-600">
+                    </div>
+
+                    <div>
+                        <label class="block text-gray-400 text-sm mb-2 ml-1">Bio</label>
+                        <div class="relative">
+                            <textarea placeholder="Tell something about yourself" class="w-full input-dark text-white py-3 px-4 rounded-2xl placeholder-gray-600 h-32 resize-none"></textarea>
+                            <span class="absolute bottom-3 right-4 text-[10px] text-gray-500">0 / 120</span>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-gray-400 text-sm mb-2 ml-1">Your role</label>
+                        <div class="relative">
+                            <div class="w-full input-dark py-3 px-4 rounded-2xl flex justify-between items-center">
+                                <span class="bg-red-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">TEAM LEAD</span>
+                                <i class="fa-solid fa-chevron-down text-white text-xs"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-gray-400 text-sm mb-2 ml-1">Your social media</label>
+                        <div class="space-y-3">
+                            <div class="relative">
+                                <i class="fa-brands fa-telegram absolute left-4 top-3.5 text-white text-xl"></i>
+                                <input type="text" placeholder="Your Telegram channel link" class="w-full input-dark text-white py-3 pl-12 pr-4 rounded-full placeholder-gray-600 text-right text-xs">
+                            </div>
+                            <div class="relative">
+                                <i class="fa-brands fa-telegram absolute left-4 top-3.5 text-white text-xl"></i>
+                                <input type="text" placeholder="Your Telegram channel link" class="w-full input-dark text-white py-3 pl-12 pr-4 rounded-full placeholder-gray-600 text-right text-xs">
+                            </div>
+                             <div class="relative">
+                                <i class="fa-brands fa-telegram absolute left-4 top-3.5 text-white text-xl"></i>
+                                <input type="text" placeholder="Your Telegram channel link" class="w-full input-dark text-white py-3 pl-12 pr-4 rounded-full placeholder-gray-600 text-right text-xs">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Tab Switching Logic
+        function switchTab(tabName) {
+            // Hide all contents
+            document.getElementById('content-wall').classList.add('hidden');
+            document.getElementById('content-projects').classList.add('hidden');
+            document.getElementById('content-activity').classList.add('hidden');
+            
+            // Show target content
+            document.getElementById('content-' + tabName).classList.remove('hidden');
+
+            // Reset all tab styles
+            const tabs = ['wall', 'projects', 'activity'];
+            tabs.forEach(t => {
+                const btn = document.getElementById('tab-' + t);
+                const icon = btn.querySelector('i');
+                
+                btn.classList.remove('text-white', 'border-red-600');
+                btn.classList.add('text-gray-500', 'border-transparent');
+                
+                if(icon) {
+                    icon.classList.remove('text-red-500'); // Optional: reset icon color if needed
+                }
+            });
+
+            // Active Tab Style
+            const activeBtn = document.getElementById('tab-' + tabName);
+            activeBtn.classList.remove('text-gray-500', 'border-transparent');
+            activeBtn.classList.add('text-white', 'border-red-600');
+        }
+
+        // Settings Modal Logic
+        function openSettings() {
+            document.getElementById('settings-modal').classList.add('active');
+        }
+
+        function closeSettings() {
+            document.getElementById('settings-modal').classList.remove('active');
+        }
+
+        // Profile Edit Modal Logic
+        function openProfileEdit() {
+            document.getElementById('profile-edit-modal').classList.add('active');
+        }
+
+        function closeProfileEdit() {
+            document.getElementById('profile-edit-modal').classList.remove('active');
+        }
+
+        // "Save" Logic (Just closes the modal for demo)
+        function saveProfile() {
+            // Here you would handle form submission
+            closeProfileEdit();
+        }
+    </script>
+</body>
+</html>

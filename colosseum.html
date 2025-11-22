@@ -36,13 +36,255 @@
             font-family: 'Inter', sans-serif;
         }
         
-        .no-scrollbar::-webkit-scrollbar { 
-            display: none; 
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
         }
-        
-        .no-scrollbar { 
-            -ms-overflow-style: none; 
-            scrollbar-width: none; 
+
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        .results-table {
+            border-spacing: 0;
+        }
+
+        .results-table th {
+            position: sticky;
+            top: 0;
+            background: #111;
+            z-index: 10;
+        }
+
+        .results-row {
+            animation: fadeInUp 0.5s ease-out forwards;
+            opacity: 0;
+        }
+
+        .results-row:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .results-row:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .results-row:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        #page-results {
+            animation: slideIn 0.4s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(100%);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .results-row:hover {
+            transform: scale(1.01);
+            box-shadow: 0 4px 20px rgba(220, 38, 38, 0.1);
+        }
+
+        @media (min-width: 768px) {
+            #page-results {
+                animation: expandToDesktop 0.6s ease-out;
+            }
+            
+            @keyframes expandToDesktop {
+                from {
+                    max-width: 375px;
+                    transform: scale(0.95);
+                }
+                to {
+                    max-width: 100%;
+                    transform: scale(1);
+                }
+            }
+            
+            .results-table {
+                animation: tableExpand 0.5s ease-out;
+            }
+            
+            @keyframes tableExpand {
+                from {
+                    opacity: 0.5;
+                    transform: scaleX(0.8);
+                }
+                to {
+                    opacity: 1;
+                    transform: scaleX(1);
+                }
+            }
+        }
+
+        @media (max-width: 767px) {
+            #page-results {
+                animation: shrinkToMobile 0.6s ease-out;
+            }
+            
+            @keyframes shrinkToMobile {
+                from {
+                    max-width: 100%;
+                    transform: scale(1.05);
+                }
+                to {
+                    max-width: 375px;
+                    transform: scale(1);
+                }
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
+        }
+
+        * {
+            transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @keyframes copySuccess {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.2);
+                background-color: #22c55e;
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        button:active {
+            animation: copySuccess 0.3s ease-out;
+        }
+
+        @keyframes gradientShift {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        .results-table thead tr {
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .transition-all {
+            transition-property: all;
+            transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .results-row:hover td {
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+        }
+
+        @keyframes shimmer {
+            0% {
+                background-position: -1000px 0;
+            }
+            100% {
+                background-position: 1000px 0;
+            }
+        }
+
+        @media (hover: none) {
+            .results-row:active {
+                background-color: #252525 !important;
+                transform: scale(0.98);
+            }
+        }
+
+        @media (min-width: 768px) and (max-width: 1024px) {
+            .results-table {
+                min-width: 900px;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .results-table {
+                min-width: 1200px;
+            }
+        }
+
+        .hover\:shadow-lg:hover {
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        #page-results.hidden {
+            animation: slideOut 0.3s ease-out forwards;
+        }
+
+        @keyframes slideOut {
+            from {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            to {
+                opacity: 0;
+                transform: translateY(-100%);
+            }
+        }
+
+        button:focus {
+            outline: 2px solid rgba(220, 38, 38, 0.5);
+            outline-offset: 2px;
+        }
+
+        button:focus:not(:focus-visible) {
+            outline: none;
+        }
+
+        @media (min-width: 768px) {
+            .results-table th,
+            .results-table td {
+                padding-left: 1.5rem;
+                padding-right: 1.5rem;
+            }
+        }
+
+        .results-row a:hover svg {
+            transform: rotate(360deg);
+            transition: transform 0.6s ease-in-out;
+        }
+
+        .results-row button:hover {
+            box-shadow: 0 0 20px rgba(220, 38, 38, 0.6),
+                        0 0 40px rgba(220, 38, 38, 0.4),
+                        0 0 60px rgba(220, 38, 38, 0.2);
+        }
+
+        .results-row {
+            transition-delay: calc(var(--row-index, 0) * 0.05s);
         }
         
         .custom-input {
@@ -80,7 +322,7 @@
 
         .blur-backdrop {
             backdrop-filter: blur(8px);
-            background-color: rgba(0, 0, 0, 0.7);
+            background-color: rgba(0, 0, 0, 0.95);
         }
 
         .results-table th {
@@ -136,9 +378,9 @@
 </head>
 <body class="font-sans antialiased overflow-hidden bg-black text-white">
 
-   <div id="page-colosseum" class="max-w-[375px] mx-auto bg-black min-h-screen relative pb-24 overflow-y-auto h-screen no-scrollbar">
+   <div id="page-colosseum" class="max-w-[375px] mx-auto bg-black h-screen relative flex flex-col overflow-hidden">
     
-    <div class="flex items-center justify-between px-4 py-2 text-xs font-bold bg-black border-b border-gray-800 sticky top-0 z-40">
+    <div class="flex items-center justify-between px-4 py-2 text-xs font-bold bg-black border-b border-gray-800 flex-shrink-0 z-40">
         <div class="flex items-center gap-2">
             <span>#1</span>
             <div class="w-5 h-5 bg-orange-500 rounded-full overflow-hidden">
@@ -155,7 +397,7 @@
         </div>
     </div>
 
-    <div class="pt-6 pb-2 text-center bg-black z-30 relative">
+    <div class="pt-6 pb-2 text-center bg-black z-30 flex-shrink-0">
         <h1 class="text-2xl font-bold flex items-center justify-center gap-2">
             The Colosseum 
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -165,7 +407,7 @@
         <p class="text-gray-400 text-sm">Top projects</p>
     </div>
 
-    <div class="flex mt-4 border-b border-gray-800 sticky top-8 bg-black z-30">
+    <div class="flex mt-4 border-b border-gray-800 bg-black z-30 flex-shrink-0">
         <div class="flex-1 flex justify-center pb-3 border-b-2 border-red-600 cursor-pointer">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
@@ -178,83 +420,82 @@
         </div>
     </div>
 
-    <div class="p-4 space-y-4 mb-32">
-        <div class="bg-[#151515] rounded-3xl p-4 border border-gray-800 relative overflow-hidden">
-            <div class="absolute top-0 right-0 w-48 h-48 bg-orange-600 rounded-full blur-3xl opacity-20 -mr-10 -mt-10 pointer-events-none"></div>
-            <div class="flex justify-between items-start mb-3 relative z-10">
-                <span class="bg-yellow-500 text-black text-xs font-bold px-3 py-1 rounded-full">TOP #1</span>
-                <button class="flex items-center gap-1 text-xs text-gray-400 bg-gray-800/50 px-2 py-1 rounded-lg border border-gray-700">
-                    Share 
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/>
-                    </svg>
-                </button>
-            </div>
-            <div class="flex gap-3 items-center mb-4 relative z-10">
-                <div class="w-16 h-16 bg-orange-500 rounded-full overflow-hidden border-2 border-orange-400 flex-shrink-0">
-                    <img src="https://api.dicebear.com/9.x/bottts-neutral/svg?seed=fire" class="w-full h-full object-cover">
-                </div>
-                <div>
-                    <div class="bg-white text-black text-[10px] font-bold px-2 py-0.5 rounded inline-flex items-center gap-1 mb-1">
-                        Solana 
-                        <svg class="w-2 h-2" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M3 5h14v2H3V5zm0 8h14v2H3v-2z"/>
-                        </svg>
-                    </div>
-                    <h3 class="text-lg font-bold">SoulVerse RPG</h3>
-                    <div class="text-gray-500 text-xs flex items-center gap-1">
-                        CA: 0x34a9...4a86 
+    <div class="flex-1 overflow-y-auto no-scrollbar">
+        <div class="p-4 space-y-4 pb-4">
+            <div class="bg-[#151515] rounded-3xl p-4 border border-gray-800 relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-48 h-48 bg-orange-600 rounded-full blur-3xl opacity-20 -mr-10 -mt-10 pointer-events-none"></div>
+                <div class="flex justify-between items-start mb-3 relative z-10">
+                    <span class="bg-yellow-500 text-black text-xs font-bold px-3 py-1 rounded-full">TOP #1</span>
+                    <button class="flex items-center gap-1 text-xs text-gray-400 bg-gray-800/50 px-2 py-1 rounded-lg border border-gray-700">
+                        Share 
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/>
                         </svg>
+                    </button>
+                </div>
+                <div class="flex gap-3 items-center mb-4 relative z-10">
+                    <div class="w-16 h-16 bg-orange-500 rounded-full overflow-hidden border-2 border-orange-400 flex-shrink-0">
+                        <img src="https://api.dicebear.com/9.x/bottts-neutral/svg?seed=fire" class="w-full h-full object-cover">
+                    </div>
+                    <div>
+                        <div class="bg-white text-black text-[10px] font-bold px-2 py-0.5 rounded inline-flex items-center gap-1 mb-1">
+                            Solana 
+                            <svg class="w-2 h-2" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M3 5h14v2H3V5zm0 8h14v2H3v-2z"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-bold">SoulVerse RPG</h3>
+                        <div class="text-gray-500 text-xs flex items-center gap-1">
+                            CA: 0x34a9...4a86 
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2 mb-4 relative z-10">
+                    <button class="bg-red-900/40 border border-red-900 text-red-200 px-4 py-1.5 rounded-full text-sm font-medium flex items-center gap-2 flex-1 justify-center">
+                        Vote 
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"></path>
+                        </svg>
+                    </button>
+                    <button onclick="openBoost()" class="bg-[#1f1f1f] text-gray-300 px-4 py-1.5 rounded-full text-sm font-medium border border-gray-700 flex-1 text-center">
+                        More info
+                    </button>
+                </div>
+                <div class="grid grid-cols-3 gap-2 relative z-10">
+                    <div class="bg-black/40 p-2 rounded-xl text-center border border-gray-800">
+                        <div class="text-[10px] text-gray-400">Transactions</div>
+                        <div class="text-green-500 font-bold text-sm">+1.6M</div>
+                    </div>
+                    <div class="bg-black/40 p-2 rounded-xl text-center border border-gray-800">
+                        <div class="text-[10px] text-gray-400">Volume</div>
+                        <div class="text-green-500 font-bold text-sm">+$2.4M</div>
+                    </div>
+                    <div class="bg-black/40 p-2 rounded-xl text-center border border-gray-800">
+                        <div class="text-[10px] text-gray-400">Holders</div>
+                        <div class="text-green-500 font-bold text-sm">+5.2K</div>
                     </div>
                 </div>
             </div>
-            <div class="flex items-center gap-2 mb-4 relative z-10">
-                <button class="bg-red-900/40 border border-red-900 text-red-200 px-4 py-1.5 rounded-full text-sm font-medium flex items-center gap-2 flex-1 justify-center">
-                    Vote 
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"></path>
-                    </svg>
-                </button>
-                <button onclick="openBoost()" class="bg-[#1f1f1f] text-gray-300 px-4 py-1.5 rounded-full text-sm font-medium border border-gray-700 flex-1 text-center">
-                    More info
-                </button>
-            </div>
-            <div class="grid grid-cols-3 gap-2 relative z-10">
-                <div class="bg-black/40 p-2 rounded-xl text-center border border-gray-800">
-                    <div class="text-[10px] text-gray-400">Transactions</div>
-                    <div class="text-green-500 font-bold text-sm">+1.6M</div>
-                </div>
-                <div class="bg-black/40 p-2 rounded-xl text-center border border-gray-800">
-                    <div class="text-[10px] text-gray-400">Volume</div>
-                    <div class="text-green-500 font-bold text-sm">+$2.4M</div>
-                </div>
-                <div class="bg-black/40 p-2 rounded-xl text-center border border-gray-800">
-                    <div class="text-[10px] text-gray-400">Holders</div>
-                    <div class="text-green-500 font-bold text-sm">+5.2K</div>
-                </div>
-            </div>
-        </div>
 
-        <div class="mb-6">
-            <button onclick="openPastBest()" class="w-full bg-[#111] text-white py-4 rounded-3xl font-medium border border-gray-800 text-lg hover:bg-[#1a1a1a] transition">
-                Past best projects
-            </button>
+            <div class="mb-6">
+                <button onclick="openPastBest()" class="w-full bg-[#111] text-white py-4 rounded-3xl font-medium border border-gray-800 text-lg hover:bg-[#1a1a1a] transition">
+                    Past best projects
+                </button>
+            </div>
         </div>
     </div>
 
-    <div class="fixed bottom-36 md:bottom-32 left-0 right-0 mx-auto max-w-[375px] z-50 pointer-events-none">
-    <div class="px-4"> 
-        <button onclick="openPublish()" class="w-full bg-[#DC2626] text-white py-4 rounded-full font-bold text-xl shadow-lg flex items-center justify-center gap-2 pointer-events-auto hover:bg-red-700 transition shadow-red-900/50">
+    <div class="absolute bottom-24 left-0 right-0 px-4 z-50 pointer-events-none">
+        <button onclick="openPublish()" class="w-full bg-[#DC2626] text-white py-3 rounded-full font-bold text-base shadow-lg flex items-center justify-center gap-2 pointer-events-auto hover:bg-red-700 transition shadow-red-900/50">
             Publish project 
-            <span class="text-2xl font-thin">+</span>
+            <span class="text-xl font-thin">+</span>
         </button>
     </div>
-</div>
 
-
-    <nav class="bg-black border-t border-gray-900 pointer-events-auto">
+    <nav class="bg-black border-t border-gray-900 pointer-events-auto flex-shrink-0">
         <div class="flex justify-around items-center py-3 relative">
             <img src="images/light.png" alt="" class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none opacity-70">
             
@@ -283,6 +524,7 @@
         </div>
     </nav>
 </div>
+
 
 <div id="page-past-best" class="hidden fixed inset-0 z-[60] bg-black max-w-[375px] mx-auto flex flex-col">
     <div class="flex items-center justify-between px-4 py-2 text-xs font-bold bg-black border-b border-gray-800 sticky top-0 z-50">
@@ -431,7 +673,7 @@
                     </button>
                 </div>
                 <div class="grid grid-cols-3 gap-2 relative z-10">
-                                        <div class="bg-black/40 p-2 rounded-xl text-center border border-gray-800">
+                    <div class="bg-black/40 p-2 rounded-xl text-center border border-gray-800">
                         <div class="text-[10px] text-gray-400">Transactions</div>
                         <div class="text-green-500 font-bold text-sm">+1.6M</div>
                     </div>
@@ -507,272 +749,15 @@
     </div>
     
     <nav class="fixed bottom-0 left-0 right-0 bg-black border-t border-gray-900 z-40 max-w-[375px] mx-auto">
-    <div class="flex justify-around items-center py-3 relative">
-        <img src="images/light.png" alt="" class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none opacity-70">
-        
-        <a href="index.html" class="flex flex-col items-center gap-1 text-gray-500 hover:text-white transition-colors relative z-10">
-            <img src="images/home.jpg" alt="Home" class="w-8 h-8">
-            <span class="text-xs">Home</span>
-        </a>
-        
-        <a href="index.html" class="flex flex-col items-center gap-1 text-gray-500 hover:text-white transition-colors relative z-10">
-            <div class="relative">
-                <img src="images/boostO.png" alt="Boost" class="w-8 h-8">
-                <div class="absolute -top-1 -right-1 w-2 h-2 bg-red-600 rounded-full"></div>
-            </div>
-            <span class="text-xs">BoosT</span>
-        </a>
-        
-        <a href="colosseum.html" class="flex flex-col items-center gap-1 px-4 py-2 -mx-4 -my-2 relative z-10">
-            <img src="images/coloseumR.png" alt="Colosseum" class="w-8 h-8">
-            <span class="text-xs font-semibold text-red-600">Colosseum</span>
-        </a>
-        
-        <button class="flex flex-col items-center gap-1 text-gray-500 hover:text-white transition-colors relative z-10">
-            <img src="images/profile.jpg" alt="Profile" class="w-8 h-8">
-            <span class="text-xs">Profile</span>
-        </button>
-    </div>
-</nav>
-
-</div>
-
-<div id="page-results" class="hidden fixed inset-0 z-[70] bg-black max-w-[375px] md:max-w-full mx-auto flex flex-col transition-all duration-300">
-    <div class="flex items-center justify-between px-4 py-2 text-xs font-bold bg-black border-b border-gray-800 sticky top-0 z-40">
-        <div class="flex items-center gap-2">
-            <span>#1</span>
-            <div class="w-5 h-5 bg-orange-500 rounded-full overflow-hidden">
-                <img src="https://api.dicebear.com/9.x/avataaars/svg?seed=Felix" alt="avatar">
-            </div>
-            <span>BoostTX • <span class="text-red-500">2,432 🔥</span></span>
-        </div>
-        <div class="flex items-center gap-2 opacity-50">
-            <span>#1</span>
-            <div class="w-5 h-5 bg-orange-500 rounded-full overflow-hidden">
-                <img src="https://api.dicebear.com/9.x/avataaars/svg?seed=Felix" alt="avatar">
-            </div>
-            <span>BoosT</span>
-        </div>
-    </div>
-
-    <div class="pt-6 pb-2 text-center bg-black z-30 relative">
-        <h1 class="text-2xl font-bold flex items-center justify-center gap-2">
-            The Colosseum 
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z" />
-            </svg>
-        </h1>
-        <p class="text-gray-400 text-sm">Results sheet</p>
-    </div>
-
-    <div class="flex mt-4 border-b border-gray-800 sticky top-8 bg-black z-30">
-        <div onclick="closeResults()" class="flex-1 flex justify-center pb-3 border-b-2 border-transparent text-gray-500 cursor-pointer hover:text-white transition">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-            </svg>
-        </div>
-        <div class="flex-1 flex justify-center pb-3 border-b-2 border-red-600 cursor-pointer">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
-            </svg>
-        </div>
-    </div>
-
-    <div class="px-4 mt-4 mb-4 max-w-[375px] md:max-w-full mx-auto">
-        <div class="bg-[#111] border border-[#333] rounded-full px-4 py-3 flex items-center gap-2">
-            <input type="text" placeholder="Find your project" class="bg-transparent w-full outline-none text-sm text-white placeholder-gray-500">
-            <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-            </svg>
-        </div>
-    </div>
-
-    <div class="flex-1 overflow-y-auto pb-36 no-scrollbar px-2 md:px-8">
-        <div class="bg-[#111] rounded-3xl border border-[#222] overflow-x-auto">
-            <table class="w-full results-table border-collapse">
-                <thead>
-                    <tr>
-                        <th class="w-8 text-center">#</th>
-                        <th class="text-left min-w-[150px]">Project</th>
-                        <th class="text-center">Network</th>
-                        <th class="hidden md:table-cell text-left min-w-[200px]">Contract</th>
-                        <th class="hidden md:table-cell text-right">Total votes</th>
-                        <th class="hidden md:table-cell text-right">Votes in 24h</th>
-                        <th class="hidden md:table-cell text-right">Votes in 7d</th>
-                        <th class="hidden md:table-cell text-right">Growth 24h %</th>
-                        <th class="hidden md:table-cell text-center">Social media</th>
-                        <th class="text-center">Actions</th>
-                    </tr>
-                </thead>
-                <tbody class="text-gray-200">
-                    <tr class="results-row">
-                        <td class="text-center font-bold">1</td>
-                        <td>
-                            <div class="flex items-center gap-2 md:gap-3">
-                                <div class="w-8 h-8 rounded-full overflow-hidden">
-                                    <img src="https://api.dicebear.com/9.x/bottts-neutral/svg?seed=John" class="w-full h-full object-cover">
-                                </div>
-                                <div>
-                                    <div class="font-bold text-sm">SoulVerse RPG</div>
-                                    <div class="text-[10px] text-gray-500 font-mono md:hidden">0x742d...5e8f</div>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="text-center">
-                            <span class="bg-white text-black text-[10px] font-bold px-2 py-1 rounded-full whitespace-nowrap">Solana</span>
-                        </td>
-                        
-                        <td class="hidden md:table-cell text-gray-500 text-xs font-mono">
-                            0x742d35Cc6634C0532925a3b844Bc9e7595e8f 
-                            <button onclick="copyToClipboard('0x742d35Cc6634C0532925a3b844Bc9e7595e8f')" class="inline-block cursor-pointer ml-1 hover:text-white">
-                                <svg class="w-3 h-3 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
-                                </svg>
-                            </button>
-                        </td>
-                        <td class="hidden md:table-cell text-right font-bold">15,234</td>
-                        <td class="hidden md:table-cell text-right text-green-500 font-medium">+2,543 ↗</td>
-                        <td class="hidden md:table-cell text-right text-green-500 font-medium">+8,120 ↗</td>
-                        <td class="hidden md:table-cell text-right text-green-500 font-bold">+123.45%</td>
-                        <td class="hidden md:table-cell text-center">
-                            <div class="flex justify-center gap-2">
-                                <a href="#" class="w-6 h-6 bg-[#222] rounded flex items-center justify-center text-xs hover:bg-[#333] cursor-pointer transition">
-                                    <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
-                                        <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
-                                    </svg>
-                                </a>
-                                <a href="#" class="w-6 h-6 bg-[#222] rounded flex items-center justify-center text-xs hover:bg-[#333] cursor-pointer transition">
-                                    <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
-                                        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-                                    </svg>
-                                </a>
-                            </div>
-                        </td>
-                        <td class="text-center">
-                            <button class="bg-[#DC2626] text-white text-xs px-3 py-1 rounded font-bold hover:bg-red-700 transition">Vote</button>
-                        </td>
-                    </tr>
-                    
-                    <tr class="results-row">
-                        <td class="text-center font-bold">2</td>
-                        <td>
-                            <div class="flex items-center gap-2 md:gap-3">
-                                <div class="w-8 h-8 rounded-full overflow-hidden">
-                                    <img src="https://api.dicebear.com/9.x/bottts-neutral/svg?seed=Emily" class="w-full h-full object-cover">
-                                </div>
-                                <div>
-                                    <div class="font-bold text-sm">Crypto Warriors</div>
-                                    <div class="text-[10px] text-gray-500 font-mono md:hidden">0x1e5a...8a2c</div>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="text-center">
-                            <span class="bg-white text-black text-[10px] font-bold px-2 py-1 rounded-full whitespace-nowrap">Ethereum</span>
-                        </td>
-                        
-                        <td class="hidden md:table-cell text-gray-500 text-xs font-mono">
-                            0x1e5a4f8c9d2b7e3a6f1d8c5b9a2e7f4d8a2c 
-                            <button onclick="copyToClipboard('0x1e5a4f8c9d2b7e3a6f1d8c5b9a2e7f4d8a2c')" class="inline-block cursor-pointer ml-1 hover:text-white">
-                                <svg class="w-3 h-3 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
-                                </svg>
-                            </button>
-                        </td>
-                        <td class="hidden md:table-cell text-right font-bold">12,100</td>
-                        <td class="hidden md:table-cell text-right text-green-500 font-medium">+1,200 ↗</td>
-                        <td class="hidden md:table-cell text-right text-green-500 font-medium">+5,430 ↗</td>
-                        <td class="hidden md:table-cell text-right text-green-500 font-bold">+5.70%</td>
-                        <td class="hidden md:table-cell text-center">
-                            <div class="flex justify-center gap-2">
-                                <a href="#" class="w-6 h-6 bg-[#222] rounded flex items-center justify-center text-xs hover:bg-[#333] cursor-pointer transition">
-                                    <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
-                                        <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
-                                    </svg>
-                                </a>
-                                <a href="#" class="w-6 h-6 bg-[#222] rounded flex items-center justify-center text-xs hover:bg-[#333] cursor-pointer transition">
-                                    <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
-                                        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-                                    </svg>
-                                </a>
-                            </div>
-                        </td>
-                        <td class="text-center">
-                            <button class="bg-[#DC2626] text-white text-xs px-3 py-1 rounded font-bold hover:bg-red-700 transition">Vote</button>
-                        </td>
-                    </tr>
-                    
-                    <tr class="results-row">
-                        <td class="text-center font-bold">3</td>
-                        <td>
-                            <div class="flex items-center gap-2 md:gap-3">
-                                <div class="w-8 h-8 rounded-full overflow-hidden">
-                                    <img src="https://api.dicebear.com/9.x/bottts-neutral/svg?seed=Michael" class="w-full h-full object-cover">
-                                </div>
-                                <div>
-                                    <div class="font-bold text-sm">DeFi Galaxy</div>
-                                    <div class="text-[10px] text-gray-500 font-mono md:hidden">0x3e9a...6f7b</div>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="text-center">
-                            <span class="bg-white text-black text-[10px] font-bold px-2 py-1 rounded-full whitespace-nowrap">Polygon</span>
-                        </td>
-                        
-                        <td class="hidden md:table-cell text-gray-500 text-xs font-mono">
-                            0x3e9a7b4c8f2d5e1a9c6b3f7d2e8a4c1b6f7b 
-                            <button onclick="copyToClipboard('0x3e9a7b4c8f2d5e1a9c6b3f7d2e8a4c1b6f7b')" class="inline-block cursor-pointer ml-1 hover:text-white">
-                                <svg class="w-3 h-3 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
-                                </svg>
-                            </button>
-                        </td>
-                        <td class="hidden md:table-cell text-right font-bold">9,500</td>
-                        <td class="hidden md:table-cell text-right text-green-500 font-medium">+300 ↗</td>
-                        <td class="hidden md:table-cell text-right text-green-500 font-medium">+2,150 ↗</td>
-                        <td class="hidden md:table-cell text-right text-green-500 font-bold">+7.14%</td>
-                        <td class="hidden md:table-cell text-center">
-                            <div class="flex justify-center gap-2">
-                                <a href="#" class="w-6 h-6 bg-[#222] rounded flex items-center justify-center text-xs hover:bg-[#333] cursor-pointer transition">
-                                    <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
-                                        <path d="M11.944 0A 12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
-                                    </svg>
-                                </a>
-                                <a href="#" class="w-6 h-6 bg-[#222] rounded flex items-center justify-center text-xs hover:bg-[#333] cursor-pointer transition">
-                                    <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
-                                        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-                                    </svg>
-                                </a>
-                            </div>
-                        </td>
-                        <td class="text-center">
-                            <button class="bg-[#DC2626] text-white text-xs px-3 py-1 rounded font-bold hover:bg-red-700 transition">Vote</button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-    
-    <div class="fixed bottom-0 left-0 right-0 mx-auto max-w-[375px] z-50 pointer-events-none">
-    <div class="px-4 mb-20 md:mb-32"> 
-        <button onclick="openPublish()" class="w-full bg-[#DC2626] text-white py-4 rounded-full font-bold text-xl shadow-lg flex items-center justify-center gap-2 pointer-events-auto hover:bg-red-700 transition shadow-red-900/50">
-            Publish project 
-            <span class="text-2xl font-thin">+</span>
-        </button>
-    </div>
-</div>
-
-    
-    <nav class="bg-black border-t border-gray-900 pointer-events-auto">
         <div class="flex justify-around items-center py-3 relative">
             <img src="images/light.png" alt="" class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none opacity-70">
             
-            <a href="javascript:void(0)" onclick="closeResults()" class="flex flex-col items-center gap-1 text-gray-500 hover:text-white transition-colors relative z-10">
+            <a href="index.html" class="flex flex-col items-center gap-1 text-gray-500 hover:text-white transition-colors relative z-10">
                 <img src="images/home.jpg" alt="Home" class="w-8 h-8">
                 <span class="text-xs">Home</span>
             </a>
             
-            <a href="javascript:void(0)" onclick="closeResults()" class="flex flex-col items-center gap-1 text-gray-500 hover:text-white transition-colors relative z-10">
+            <a href="index.html" class="flex flex-col items-center gap-1 text-gray-500 hover:text-white transition-colors relative z-10">
                 <div class="relative">
                     <img src="images/boostO.png" alt="Boost" class="w-8 h-8">
                     <div class="absolute -top-1 -right-1 w-2 h-2 bg-red-600 rounded-full"></div>
@@ -780,7 +765,7 @@
                 <span class="text-xs">BoosT</span>
             </a>
             
-            <a href="javascript:void(0)" class="flex flex-col items-center gap-1 px-4 py-2 -mx-4 -my-2 relative z-10">
+            <a href="colosseum.html" class="flex flex-col items-center gap-1 px-4 py-2 -mx-4 -my-2 relative z-10">
                 <img src="images/coloseumR.png" alt="Colosseum" class="w-8 h-8">
                 <span class="text-xs font-semibold text-red-600">Colosseum</span>
             </a>
@@ -792,7 +777,267 @@
         </div>
     </nav>
 </div>
+
+<div id="page-results" class="hidden fixed inset-0 z-[70] bg-black mx-auto flex flex-col h-screen overflow-hidden transition-all duration-500 ease-in-out max-w-[375px] md:max-w-full">
+    
+    <div class="flex items-center justify-between px-4 py-2 text-xs font-bold bg-black border-b border-gray-800 flex-shrink-0 z-40 transition-all duration-300">
+        <div class="flex items-center gap-2 transform transition-transform duration-300 hover:scale-105">
+            <span>#1</span>
+            <div class="w-5 h-5 bg-orange-500 rounded-full overflow-hidden transition-transform duration-300 hover:rotate-12">
+                <img src="https://api.dicebear.com/9.x/avataaars/svg?seed=Felix" alt="avatar" class="w-full h-full object-cover">
+            </div>
+            <span>BoostTX • <span class="text-red-500">2,432 🔥</span></span>
+        </div>
+        <div class="flex items-center gap-2 opacity-50 transform transition-all duration-300 hover:opacity-100 hover:scale-105">
+            <span>#1</span>
+            <div class="w-5 h-5 bg-orange-500 rounded-full overflow-hidden">
+                <img src="https://api.dicebear.com/9.x/avataaars/svg?seed=Felix" alt="avatar" class="w-full h-full object-cover">
+            </div>
+            <span>BoosT</span>
+        </div>
+    </div>
+
+    <div class="pt-6 pb-2 text-center bg-black z-30 flex-shrink-0 transition-all duration-300">
+        <h1 class="text-2xl font-bold flex items-center justify-center gap-2 transform transition-all duration-300 hover:scale-105">
+            The Colosseum 
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 transition-transform duration-300 hover:rotate-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z" />
+            </svg>
+        </h1>
+        <p class="text-gray-400 text-sm transition-colors duration-300">Results sheet</p>
+    </div>
+
+    <div class="flex mt-4 border-b border-gray-800 bg-black z-30 flex-shrink-0 transition-all duration-300">
+        <div onclick="closeResults()" class="flex-1 flex justify-center pb-3 border-b-2 border-transparent text-gray-500 cursor-pointer transition-all duration-300 hover:text-white hover:border-gray-600 transform hover:scale-110">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+            </svg>
+        </div>
+        <div class="flex-1 flex justify-center pb-3 border-b-2 border-red-600 cursor-pointer transition-all duration-300">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white transition-transform duration-300 hover:scale-110" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+            </svg>
+        </div>
+    </div>
+
+    <div class="px-4 mt-4 mb-4 flex-shrink-0 transition-all duration-300">
+        <div class="bg-[#111] border border-[#333] rounded-full px-4 py-3 flex items-center gap-2 transition-all duration-300 hover:border-gray-600 hover:shadow-lg hover:shadow-gray-900/50 transform hover:scale-[1.02]">
+            <input type="text" placeholder="Find your project" class="bg-transparent w-full outline-none text-sm text-white placeholder-gray-500 transition-all duration-300">
+            <svg class="w-5 h-5 text-gray-400 transition-all duration-300 hover:text-white hover:rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+            </svg>
+        </div>
+    </div>
+
+    <div class="flex-1 overflow-y-auto no-scrollbar px-4 md:px-8">
+        <div class="bg-[#111] rounded-3xl border border-[#222] overflow-hidden transition-all duration-300 hover:border-[#333] hover:shadow-xl hover:shadow-red-900/10">
+            <div class="overflow-x-auto">
+                <table class="w-full results-table border-collapse min-w-[800px]">
+                    <thead class="sticky top-0 bg-[#111] z-10">
+                        <tr class="border-b border-gray-800">
+                            <th class="px-3 py-4 text-center text-xs font-bold text-gray-400 w-12">#</th>
+                            <th class="px-4 py-4 text-left text-xs font-bold text-gray-400 min-w-[180px]">Project</th>
+                            <th class="px-3 py-4 text-center text-xs font-bold text-gray-400 min-w-[100px]">Network</th>
+                            <th class="px-4 py-4 text-left text-xs font-bold text-gray-400 min-w-[250px] hidden md:table-cell">Contract</th>
+                            <th class="px-4 py-4 text-right text-xs font-bold text-gray-400 min-w-[100px] hidden md:table-cell">Total votes</th>
+                            <th class="px-4 py-4 text-right text-xs font-bold text-gray-400 min-w-[120px] hidden md:table-cell">Votes in 24h</th>
+                            <th class="px-4 py-4 text-right text-xs font-bold text-gray-400 min-w-[110px] hidden md:table-cell">Votes in 7d</th>
+                            <th class="px-4 py-4 text-right text-xs font-bold text-gray-400 min-w-[120px] hidden md:table-cell">Growth 24h %</th>
+                            <th class="px-4 py-4 text-center text-xs font-bold text-gray-400 min-w-[120px] hidden md:table-cell">Social media</th>
+                            <th class="px-4 py-4 text-center text-xs font-bold text-gray-400 min-w-[100px]">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-gray-200">
+                        <tr class="results-row border-b border-gray-800/50 transition-all duration-300 hover:bg-[#1a1a1a] group">
+                            <td class="px-3 py-4 text-center font-bold text-yellow-500 transition-all duration-300 group-hover:scale-110">1</td>
+                            <td class="px-4 py-4">
+                                <div class="flex items-center gap-3 transition-all duration-300 group-hover:translate-x-1">
+                                    <div class="w-10 h-10 rounded-full overflow-hidden flex-shrink-0 transition-all duration-300 group-hover:scale-110 group-hover:rotate-6 ring-2 ring-transparent group-hover:ring-orange-500">
+                                        <img src="https://api.dicebear.com/9.x/bottts-neutral/svg?seed=John" class="w-full h-full object-cover">
+                                    </div>
+                                    <div>
+                                        <div class="font-bold text-sm transition-colors duration-300 group-hover:text-orange-400">SoulVerse RPG</div>
+                                        <div class="text-[10px] text-gray-500 font-mono md:hidden transition-colors duration-300 group-hover:text-gray-400">0x742d...5e8f</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="px-3 py-4 text-center">
+                                <span class="bg-white text-black text-[10px] font-bold px-3 py-1 rounded-full whitespace-nowrap inline-block transition-all duration-300 hover:scale-110 hover:shadow-lg hover:shadow-white/30">Solana</span>
+                            </td>
+                            <td class="px-4 py-4 hidden md:table-cell text-gray-500 text-xs font-mono">
+                                <div class="flex items-center gap-2">
+                                    <span class="transition-colors duration-300 group-hover:text-gray-300">0x742d35Cc6634C0532925a3b844Bc9e7595e8f</span>
+                                    <button onclick="copyToClipboard('0x742d35Cc6634C0532925a3b844Bc9e7595e8f')" class="inline-flex items-center justify-center w-6 h-6 rounded hover:bg-[#222] transition-all duration-300 hover:scale-110 active:scale-95">
+                                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </td>
+                            <td class="px-4 py-4 hidden md:table-cell text-right font-bold transition-all duration-300 group-hover:text-orange-400 group-hover:scale-110">15,234</td>
+                            <td class="px-4 py-4 hidden md:table-cell text-right text-green-500 font-medium transition-all duration-300 group-hover:scale-110">+2,543 ↗</td>
+                            <td class="px-4 py-4 hidden md:table-cell text-right text-green-500 font-medium transition-all duration-300 group-hover:scale-110">+8,120 ↗</td>
+                            <td class="px-4 py-4 hidden md:table-cell text-right text-green-500 font-bold transition-all duration-300 group-hover:scale-110 group-hover:text-green-400">+123.45%</td>
+                            <td class="px-4 py-4 hidden md:table-cell text-center">
+                                <div class="flex justify-center gap-2">
+                                    <a href="#" class="w-7 h-7 bg-[#222] rounded flex items-center justify-center text-xs transition-all duration-300 hover:bg-[#333] hover:scale-110 active:scale-95 hover:shadow-lg hover:shadow-blue-500/30">
+                                        <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+                                        </svg>
+                                    </a>
+                                    <a href="#" class="w-7 h-7 bg-[#222] rounded flex items-center justify-center text-xs transition-all duration-300 hover:bg-[#333] hover:scale-110 active:scale-95 hover:shadow-lg hover:shadow-gray-500/30">
+                                        <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                                        </svg>
+                                    </a>
+                                </div>
+                            </td>
+                            <td class="px-4 py-4 text-center">
+                                <button class="bg-[#DC2626] text-white text-xs px-4 py-2 rounded-lg font-bold transition-all duration-300 hover:bg-red-700 hover:scale-110 hover:shadow-lg hover:shadow-red-900/50 active:scale-95">Vote</button>
+                            </td>
+                        </tr>
+                        
+                        <tr class="results-row border-b border-gray-800/50 transition-all duration-300 hover:bg-[#1a1a1a] group">
+                            <td class="px-3 py-4 text-center font-bold text-gray-400 transition-all duration-300 group-hover:scale-110 group-hover:text-gray-300">2</td>
+                            <td class="px-4 py-4">
+                                <div class="flex items-center gap-3 transition-all duration-300 group-hover:translate-x-1">
+                                    <div class="w-10 h-10 rounded-full overflow-hidden flex-shrink-0 transition-all duration-300 group-hover:scale-110 group-hover:rotate-6 ring-2 ring-transparent group-hover:ring-blue-500">
+                                        <img src="https://api.dicebear.com/9.x/bottts-neutral/svg?seed=Emily" class="w-full h-full object-cover">
+                                    </div>
+                                    <div>
+                                        <div class="font-bold text-sm transition-colors duration-300 group-hover:text-blue-400">Crypto Warriors</div>
+                                        <div class="text-[10px] text-gray-500 font-mono md:hidden transition-colors duration-300 group-hover:text-gray-400">0x1e5a...8a2c</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="px-3 py-4 text-center">
+                                <span class="bg-white text-black text-[10px] font-bold px-3 py-1 rounded-full whitespace-nowrap inline-block transition-all duration-300 hover:scale-110 hover:shadow-lg hover:shadow-white/30">Ethereum</span>
+                            </td>
+                            <td class="px-4 py-4 hidden md:table-cell text-gray-500 text-xs font-mono">
+                                <div class="flex items-center gap-2">
+                                    <span class="transition-colors duration-300 group-hover:text-gray-300">0x1e5a4f8c9d2b7e3a6f1d8c5b9a2e7f4d8a2c</span>
+                                    <button onclick="copyToClipboard('0x1e5a4f8c9d2b7e3a6f1d8c5b9a2e7f4d8a2c')" class="inline-flex items-center justify-center w-6 h-6 rounded hover:bg-[#222] transition-all duration-300 hover:scale-110 active:scale-95">
+                                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </td>
+                            <td class="px-4 py-4 hidden md:table-cell text-right font-bold transition-all duration-300 group-hover:text-blue-400 group-hover:scale-110">12,100</td>
+                            <td class="px-4 py-4 hidden md:table-cell text-right text-green-500 font-medium transition-all duration-300 group-hover:scale-110">+1,200 ↗</td>
+                            <td class="px-4 py-4 hidden md:table-cell text-right text-green-500 font-medium transition-all duration-300 group-hover:scale-110">+5,430 ↗</td>
+                            <td class="px-4 py-4 hidden md:table-cell text-right text-green-500 font-bold transition-all duration-300 group-hover:scale-110 group-hover:text-green-400">+5.70%</td>
+                            <td class="px-4 py-4 hidden md:table-cell text-center">
+                                <div class="flex justify-center gap-2">
+                                    <a href="#" class="w-7 h-7 bg-[#222] rounded flex items-center justify-center text-xs transition-all duration-300 hover:bg-[#333] hover:scale-110 active:scale-95 hover:shadow-lg hover:shadow-blue-500/30">
+                                        <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+                                        </svg>
+                                    </a>
+                                    <a href="#" class="w-7 h-7 bg-[#222] rounded flex items-center justify-center text-xs transition-all duration-300 hover:bg-[#333] hover:scale-110 active:scale-95 hover:shadow-lg hover:shadow-gray-500/30">
+                                        <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                                        </svg>
+                                    </a>
+                                </div>
+                            </td>
+                            <td class="px-4 py-4 text-center">
+                                <button class="bg-[#DC2626] text-white text-xs px-4 py-2 rounded-lg font-bold transition-all duration-300 hover:bg-red-700 hover:scale-110 hover:shadow-lg hover:shadow-red-900/50 active:scale-95">Vote</button>
+                            </td>
+                        </tr>
+                        
+                        <tr class="results-row border-b border-gray-800/50 transition-all duration-300 hover:bg-[#1a1a1a] group">
+                            <td class="px-3 py-4 text-center font-bold text-gray-400 transition-all duration-300 group-hover:scale-110 group-hover:text-gray-300">3</td>
+                            <td class="px-4 py-4">
+                                <div class="flex items-center gap-3 transition-all duration-300 group-hover:translate-x-1">
+                                    <div class="w-10 h-10 rounded-full overflow-hidden flex-shrink-0 transition-all duration-300 group-hover:scale-110 group-hover:rotate-6 ring-2 ring-transparent group-hover:ring-purple-500">
+                                        <img src="https://api.dicebear.com/9.x/bottts-neutral/svg?seed=Michael" class="w-full h-full object-cover">
+                                    </div>
+                                    <div>
+                                        <div class="font-bold text-sm transition-colors duration-300 group-hover:text-purple-400">DeFi Galaxy</div>
+                                        <div class="text-[10px] text-gray-500 font-mono md:hidden transition-colors duration-300 group-hover:text-gray-400">0x3e9a...6f7b</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="px-3 py-4 text-center">
+                                <span class="bg-white text-black text-[10px] font-bold px-3 py-1 rounded-full whitespace-nowrap inline-block transition-all duration-300 hover:scale-110 hover:shadow-lg hover:shadow-white/30">Polygon</span>
+                            </td>
+                            <td class="px-4 py-4 hidden md:table-cell text-gray-500 text-xs font-mono">
+                                <div class="flex items-center gap-2">
+                                    <span class="transition-colors duration-300 group-hover:text-gray-300">0x3e9a7b4c8f2d5e1a9c6b3f7d2e8a4c1b6f7b</span>
+                                    <button onclick="copyToClipboard('0x3e9a7b4c8f2d5e1a9c6b3f7d2e8a4c1b6f7b')" class="inline-flex items-center justify-center w-6 h-6 rounded hover:bg-[#222] transition-all duration-300 hover:scale-110 active:scale-95">
+                                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </td>
+                            <td class="px-4 py-4 hidden md:table-cell text-right font-bold transition-all duration-300 group-hover:text-purple-400 group-hover:scale-110">9,500</td>
+                            <td class="px-4 py-4 hidden md:table-cell text-right text-green-500 font-medium transition-all duration-300 group-hover:scale-110">+300 ↗</td>
+                            <td class="px-4 py-4 hidden md:table-cell text-right text-green-500 font-medium transition-all duration-300 group-hover:scale-110">+2,150 ↗</td>
+                            <td class="px-4 py-4 hidden md:table-cell text-right text-green-500 font-bold transition-all duration-300 group-hover:scale-110 group-hover:text-green-400">+7.14%</td>
+                            <td class="px-4 py-4 hidden md:table-cell text-center">
+                                <div class="flex justify-center gap-2">
+                                    <a href="#" class="w-7 h-7 bg-[#222] rounded flex items-center justify-center text-xs transition-all duration-300 hover:bg-[#333] hover:scale-110 active:scale-95 hover:shadow-lg hover:shadow-blue-500/30">
+                                        <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+                                        </svg>
+                                    </a>
+                                    <a href="#" class="w-7 h-7 bg-[#222] rounded flex items-center justify-center text-xs transition-all duration-300 hover:bg-[#333] hover:scale-110 active:scale-95 hover:shadow-lg hover:shadow-gray-500/30">
+                                        <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                                        </svg>
+                                    </a>
+                                </div>
+                            </td>
+                            <td class="px-4 py-4 text-center">
+                                <button class="bg-[#DC2626] text-white text-xs px-4 py-2 rounded-lg font-bold transition-all duration-300 hover:bg-red-700 hover:scale-110 hover:shadow-lg hover:shadow-red-900/50 active:scale-95">Vote</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <div class="absolute bottom-24 left-0 right-0 px-4 z-50 pointer-events-none transition-all duration-300 flex justify-center">
+    <button onclick="openPublishFromResults()" class="w-full md:w-auto md:px-16 bg-[#DC2626] text-white py-3 rounded-full font-bold text-base shadow-lg flex items-center justify-center gap-2 pointer-events-auto transition-all duration-300 hover:bg-red-700 hover:scale-[1.02] hover:shadow-2xl hover:shadow-red-900/50 active:scale-95 transform">
+        <span class="transition-all duration-300">Publish project</span>
+        <span class="text-xl font-thin transition-all duration-300 group-hover:rotate-90">+</span>
+    </button>
 </div>
+
+
+    <nav class="bg-black border-t border-gray-900 pointer-events-auto flex-shrink-0 transition-all duration-300">
+        <div class="flex justify-around items-center py-3 relative">
+            <img src="images/light.png" alt="" class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none opacity-70 transition-opacity duration-300">
+            
+            <a href="javascript:void(0)" onclick="closeResults()" class="flex flex-col items-center gap-1 text-gray-500 transition-all duration-300 hover:text-white hover:scale-110 relative z-10 transform active:scale-95">
+                <img src="images/home.jpg" alt="Home" class="w-8 h-8 transition-transform duration-300">
+                <span class="text-xs transition-all duration-300">Home</span>
+            </a>
+            
+            <a href="javascript:void(0)" onclick="closeResults()" class="flex flex-col items-center gap-1 text-gray-500 transition-all duration-300 hover:text-white hover:scale-110 relative z-10 transform active:scale-95">
+                <div class="relative">
+                    <img src="images/boostO.png" alt="Boost" class="w-8 h-8 transition-transform duration-300">
+                    <div class="absolute -top-1 -right-1 w-2 h-2 bg-red-600 rounded-full transition-all duration-300 animate-pulse"></div>
+                </div>
+                <span class="text-xs transition-all duration-300">BoosT</span>
+            </a>
+            
+            <a href="javascript:void(0)" class="flex flex-col items-center gap-1 px-4 py-2 -mx-4 -my-2 relative z-10 transition-all duration-300 hover:scale-110 transform active:scale-95">
+                <img src="images/coloseumR.png" alt="Colosseum" class="w-8 h-8 transition-transform duration-300">
+                <span class="text-xs font-semibold text-red-600 transition-all duration-300">Colosseum</span>
+            </a>
+            
+            <button class="flex flex-col items-center gap-1 text-gray-500 transition-all duration-300 hover:text-white hover:scale-110 relative z-10 transform active:scale-95">
+                <img src="images/profile.jpg" alt="Profile" class="w-8 h-8 transition-transform duration-300">
+                <span class="text-xs transition-all duration-300">Profile</span>
+            </button>
+        </div>
+    </nav>
+</div>
+
 
 <div id="page-boost" class="hidden fixed inset-0 z-[100] bg-black max-w-[375px] mx-auto overflow-y-auto no-scrollbar pb-24">
     
@@ -1015,7 +1260,7 @@
         
         <div class="relative mb-8">
             <div class="bg-[#0a0a0a] border border-[#333] rounded-2xl p-4 pb-8">
-                                <textarea class="w-full bg-transparent text-white text-sm outline-none resize-none h-20" placeholder="My project description"></textarea>
+                <textarea class="w-full bg-transparent text-white text-sm outline-none resize-none h-20" placeholder="My project description"></textarea>
             </div>
             <span class="absolute bottom-2 right-4 text-xs text-gray-500">0 / 120</span>
             <div class="absolute bottom-0 left-0 w-full h-[1px] bg-red-600 rounded-b-2xl"></div>
@@ -1386,18 +1631,47 @@ function closeDeleteModal() {
 function openPublish() {
     const rulesPage = document.getElementById('page-rules');
     const publishPage = document.getElementById('page-publish');
+    const colosseumPage = document.getElementById('page-colosseum');
     
     if (!localStorage.getItem('rulesAccepted')) {
+        colosseumPage.style.display = 'none';
         rulesPage.style.display = 'flex';
         publishPage.classList.add('hidden');
     } else {
+        colosseumPage.style.display = 'none';
+        rulesPage.style.display = 'none';
+        publishPage.classList.remove('hidden');
+    }
+}
+
+function openPublishFromResults() {
+    const rulesPage = document.getElementById('page-rules');
+    const publishPage = document.getElementById('page-publish');
+    const resultsPage = document.getElementById('page-results');
+    
+    if (!localStorage.getItem('rulesAccepted')) {
+        resultsPage.classList.add('hidden');
+        rulesPage.style.display = 'flex';
+        publishPage.classList.add('hidden');
+    } else {
+        resultsPage.classList.add('hidden');
         rulesPage.style.display = 'none';
         publishPage.classList.remove('hidden');
     }
 }
 
 function closePublish() {
-    document.getElementById('page-publish').classList.add('hidden');
+    const publishPage = document.getElementById('page-publish');
+    const colosseumPage = document.getElementById('page-colosseum');
+    const resultsPage = document.getElementById('page-results');
+    
+    publishPage.classList.add('hidden');
+    
+    if (!resultsPage.classList.contains('hidden')) {
+        resultsPage.classList.remove('hidden');
+    } else {
+        colosseumPage.style.display = 'flex';
+    }
 }
 
 function toggleRulesButton() {
@@ -1465,8 +1739,7 @@ function initChart() {
         series: [{
             name: 'Price',
             data: [
-                {x: new Date('2024-01-01').getTime(), y: [0.020, 0.024, 0.019, 0.023]
-                },
+                {x: new Date('2024-01-01').getTime(), y: [0.020, 0.024, 0.019, 0.023]},
                 {x: new Date('2024-01-02').getTime(), y: [0.023, 0.026, 0.022, 0.025]},
                 {x: new Date('2024-01-03').getTime(), y: [0.025, 0.027, 0.024, 0.026]},
                 {x: new Date('2024-01-04').getTime(), y: [0.026, 0.028, 0.025, 0.027]},
@@ -1531,12 +1804,35 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
+    
+    const rows = document.querySelectorAll('.results-row');
+    rows.forEach((row, index) => {
+        row.style.setProperty('--row-index', index);
+    });
+});
+
+let currentWidth = window.innerWidth;
+
+window.addEventListener('resize', () => {
+    const newWidth = window.innerWidth;
+    const pageResults = document.getElementById('page-results');
+    
+    if ((currentWidth < 768 && newWidth >= 768) || (currentWidth >= 768 && newWidth < 768)) {
+        if (!pageResults.classList.contains('hidden')) {
+            pageResults.style.animation = 'none';
+            setTimeout(() => {
+                pageResults.style.animation = '';
+            }, 10);
+        }
+    }
+    
+    currentWidth = newWidth;
 });
 </script>
 </body>
 </html>
 
 
+
+
                 
-
-
